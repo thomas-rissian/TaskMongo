@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "691f6725f64127aac071085a"
+  },
+  "titre": "Ma première tâche",
+  "description": "Ceci est un test",
+  "statut": "à faire",
+  "priorite": "moyenne",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "dateCreation": {
+    "$date": "2025-11-20T19:08:21.465Z"
+  },
+  "sousTaches": [],
+  "commentaires": [],
+  "historiqueModifications": [],
+  "createdAt": {
+    "$date": "2025-11-20T19:08:21.475Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-20T19:08:21.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "691f67a4f64127aac071085d"
+  },
+  "titre": "Ma deuxième tâche",
+  "description": "Ceci est le test 2",
+  "statut": "à faire",
+  "priorite": "moyenne",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "dateCreation": {
+    "$date": "2025-11-20T19:10:28.637Z"
+  },
+  "sousTaches": [],
+  "commentaires": [],
+  "historiqueModifications": [],
+  "createdAt": {
+    "$date": "2025-11-20T19:10:28.639Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-20T19:10:28.639Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "691f6a70177115e39d41113a"
+  },
+  "titre": "Ma troisième tâche",
+  "description": "Ceci est un test",
+  "statut": "à faire",
+  "priorite": "moyenne",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "Test",
+  "dateCreation": {
+    "$date": "2025-11-20T19:22:24.298Z"
+  },
+  "sousTaches": [],
+  "commentaires": [],
+  "historiqueModifications": [],
+  "createdAt": {
+    "$date": "2025-11-20T19:22:24.309Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-20T19:22:24.309Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,9 @@
+<p>task-list works!</p>
+
+<mat-nav-list>
+    @for (task of tasks; track $index) {
+        <a mat-list-item [routerLink]="['/tasks', task.id]">
+            {{ task.titre }}
+        </a>
+    }
+</mat-nav-list>

@@ -1,0 +1,10 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.suggest.enabled": true,
+  "typescript.suggest.autoImports": true,
+  "[typescript]": {
+    "editor.quickSuggestions": { "other": true, "comments": false, "strings": false }
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.snippetSuggestions": "top"
+}
