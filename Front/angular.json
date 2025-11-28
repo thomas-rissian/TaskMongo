@@ -5,18 +5,19 @@
     "packageManager": "npm"
   },
   "newProjectRoot": "projects",
+  "defaultProject": "Front",
   "projects": {
     "Front": {
       "projectType": "application",
       "schematics": {},
-      "root": "",
-      "sourceRoot": "src",
+      "root": "apps/task-app",
+      "sourceRoot": "apps/task-app/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
+            "browser": "apps/task-app/src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -25,7 +26,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "apps/task-app/src/styles.css"
             ]
           },
           "configurations": {
