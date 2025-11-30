@@ -1,36 +1,29 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const tasksRouter = require('./routes/tasks');
-// const swaggerUi = require('swagger-ui-express');
-// const openapi = require('./docs/openapi.json');
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../.env') }); 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // --- CONNEXION MONGODB ---
-const mongoURL = 'mongodb://localhost:27017/taskmongo';
-mongoose.connect(mongoURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ MongoDB connecté'))
-.catch(err => {
-  console.error('❌ Erreur connexion MongoDB:', err);
-  process.exit(1); // quitte si la connexion échoue
-});
+const mongoURL = process.env.DATABASE_URL;
 
-// // route racine simple (ou rediriger vers /docs)
-// app.get('/', (req, res) => {
-//   // Option A: message simple
-//   // res.send('API TaskMongo — voir /docs pour la documentation');
+mongoose.connect(mongoURL) 
+  .then(() => console.log('MongoDB connecté'))
+  .catch(err => {
+    console.error('Erreur connexion MongoDB:', err);
+    process.exit(1);
+  });
 
-//   // Option B: redirection vers Swagger UI si installé
-//   res.redirect('/docs');
-// });
+// --- ROUTES ---
+app.use('/api/tasks', require('./routes/tasks.routes'));
+app.use('/api/tasks', require('./routes/subtasks.routes'));
+app.use('/api/tasks', require('./routes/comments.routes'));
+app.use('/api/authors', require('./routes/author.routes'));
 
-app.use('/api/tasks', tasksRouter);
-// app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 module.exports = app;
