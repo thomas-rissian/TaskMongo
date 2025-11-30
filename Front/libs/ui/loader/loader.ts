@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-loader',
   imports: [],
   templateUrl: './loader.html',
-  styleUrls: ['./loader.css'],
 })
 export class Loader {
   isLoading: boolean = true;

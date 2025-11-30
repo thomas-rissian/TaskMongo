@@ -1,0 +1,43 @@
+<div class="relative w-full min-w-[200px]">
+  <div 
+    class="flex justify-between items-center px-4 py-2.5 border border-gray-300 rounded-lg bg-white cursor-pointer hover:border-gray-500 transition-colors"
+    (click)="toggleOpen()">
+    <span class="text-gray-700">
+      @if (value) {
+        @for (key of paramData; track key) {
+          {{ value[key] }}
+        }
+      } @else {
+        Sélectionner...
+      }
+    </span>
+    <span 
+      class="text-xs transition-transform duration-200"
+      [class.rotate-180]="isOpen">
+      ▼
+    </span>
+  </div>
+  
+  @if (isOpen) {
+    <ul class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg max-h-52 overflow-y-auto z-50 shadow-lg">
+      <li 
+          class="px-4 py-2.5 cursor-pointer hover:bg-gray-100 transition-colors first:rounded-t-lg last:rounded-b-lg"
+          [class.bg-blue-100]="value === 'None'"
+          [class.font-medium]="value === 'None'"
+          (click)="selectNone()">
+          None
+        </li>
+      @for (item of data; track item) {
+        <li 
+          class="px-4 py-2.5 cursor-pointer hover:bg-gray-100 transition-colors first:rounded-t-lg last:rounded-b-lg"
+          [class.bg-blue-100]="value === item"
+          [class.font-medium]="value === item"
+          (click)="selectItem(item)">
+          @for (key of paramData; track key) {
+            {{ item[key] }}
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

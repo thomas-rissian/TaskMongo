@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export type InputType = 
   | 'text'
@@ -20,7 +20,6 @@ export type InputType =
   selector: 'app-text-field',
   standalone: true,
   templateUrl: './textField.html',
-  styleUrl: './textField.css',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

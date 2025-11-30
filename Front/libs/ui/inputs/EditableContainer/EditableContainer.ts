@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './editableContainer.html',
-  styleUrl: './editableContainer.css',
 })
 export class EditableContainer {
   @Input() title: string = '';

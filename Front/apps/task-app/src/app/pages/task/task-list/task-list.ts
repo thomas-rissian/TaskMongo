@@ -10,7 +10,6 @@ import { Loader } from '@libs/ui/loader/loader';
   selector: 'app-task-list',
   imports: [CommonModule, RouterLink, MatListModule, Loader],
   templateUrl: './task-list.html',
-  styleUrls: ['./task-list.css'],
 })
 export class TaskList implements OnInit {
   @ViewChild(Loader) loader!: Loader;

@@ -4,14 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from '../../../models/task.model';
 import { TasksService } from '../../../core/service/tasks.service';
 import { TextField } from '@libs/ui/inputs/textField/textField';
-import { AuthorEdit } from "../../../components/authorEdit/authorEdit";
+import { AuthorEdit } from "../../../components/author/authorEdit/authorEdit";
+import { SelectField } from "@libs/ui/inputs/selectField/selectField";
+import { AuthorSelect } from "../../../components/author/authorSelect/authorSelect";
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorEdit],
+  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorEdit, AuthorSelect],
   templateUrl: './task-form.html',
-  styleUrl: './task-form.css',
 })
 export class TaskForm implements OnInit {
   private activatedRoute = inject(ActivatedRoute);

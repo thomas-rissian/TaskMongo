@@ -8,7 +8,6 @@ import { Loader } from '@libs/ui/loader/loader';
   selector: 'app-task-detail',
   imports: [Loader],
   templateUrl: './task-detail.html',
-  styleUrl: './task-detail.css',
 })
 export class TaskDetail implements OnInit {
   @ViewChild(Loader) loader!: Loader;

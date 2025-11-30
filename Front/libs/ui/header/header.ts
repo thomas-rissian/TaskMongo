@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-header',
   imports: [ CommonModule, RouterLink],
-  styleUrl: './header.css',
   templateUrl: './header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

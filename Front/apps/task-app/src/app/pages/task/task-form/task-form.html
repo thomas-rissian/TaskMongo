@@ -14,8 +14,9 @@
       [formControl]="$any(taskForm.get('description'))"
       error="{{getError('description')}}"/>
 
-  <app-author-edit [authorGroup]="$any(taskForm.get('auteur'))" 
-    [getError]="getError.bind(this)"/>
+    <app-author-select 
+      [authorGroup]="$any(taskForm.get('auteur'))"
+      [getError]="getError.bind(this)"/>
 
 </form>
 

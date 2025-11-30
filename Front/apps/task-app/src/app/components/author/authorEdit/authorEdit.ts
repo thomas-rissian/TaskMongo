@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { EditableContainer } from '@libs/ui/inputs/EditableContainer/EditableContainer';
 import { TextField } from '@libs/ui/inputs/textField/textField';
-import { Author } from '../../models/author.model';
+import { Author } from '../../../models/author.model';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-author-edit',
   imports: [EditableContainer, TextField, FormsModule, ReactiveFormsModule],
   templateUrl: './authorEdit.html',
-  styleUrls: ['./authorEdit.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorEdit { 

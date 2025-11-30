@@ -1,0 +1,13 @@
+<app-select-field
+    title="Auteur"
+    [data]="authorList"
+    [paramData]="['nom','prenom']"
+    (valueChange)="authorGroup.patchValue($event)"
+    (noneSelect)="showAuthorForm($event)"
+    />
+
+    @if(IsAuthorFormVisible){
+        <app-author-edit 
+            [authorGroup]="$any(authorGroup)" 
+            [getError]="getError.bind(this)"/>
+    }
