@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "defaultProject": "Front",
@@ -17,6 +18,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "poll": 10,
             "browser": "apps/task-app/src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [

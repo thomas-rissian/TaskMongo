@@ -1,1 +1,14 @@
-<p>List : </p>
+<div>
+    <app-loader></app-loader>
+    <ul>
+        @if (task) {
+            <li>titre : {{ task.titre }}</li>
+            <li>Auteur : {{ task.auteur.nom }}</li> 
+            <li>DateCreation : {{ task.dateCreation }}</li> 
+            <li>commentaires : {{ task.commentaires }}</li>
+            <li>Historique : {{ task.historiqueModifications }}</li> 
+            <li>sousTaches : {{ task.sousTaches }}</li> 
+        }
+        
+    </ul>
+</div>

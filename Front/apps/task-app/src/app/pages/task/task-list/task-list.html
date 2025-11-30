@@ -1,9 +1,10 @@
 <p>task-list works!</p>
 
 <mat-nav-list>
+    <app-loader></app-loader>
     @for (task of tasks; track $index) {
-        <a mat-list-item [routerLink]="['/tasks', task.id]">
-            {{ task.titre }}
+        <a mat-list-item [routerLink]="['/tasks', task._id]">
+            {{ task.titre }} + {{ task._id }}
         </a>
     }
 </mat-nav-list>

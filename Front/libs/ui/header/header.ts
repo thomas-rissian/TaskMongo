@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { MatNavList } from "@angular/material/list";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [MatNavList,CommonModule],
+  imports: [ CommonModule, RouterLink],
   styleUrl: './header.css',
   templateUrl: './header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header{
   @Input()
-  headerList: string[] = [ 'Home', 'Tasks' ];
+  headerList: string[] = [];
   
  }
