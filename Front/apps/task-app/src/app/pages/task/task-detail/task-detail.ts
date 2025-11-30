@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angula
 import { TasksService } from '../../../core/service/tasks.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from '../../../models/task.model';
-import { Loader } from '../../../../../../../libs/ui/loader/loader';
+import { Loader } from '@libs/ui/loader/loader';
 
 @Component({
   selector: 'app-task-detail',

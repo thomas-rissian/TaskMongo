@@ -1,83 +1,104 @@
-import {  Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from '../../../models/task.model';
 import { TasksService } from '../../../core/service/tasks.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TextField } from "../../../components/inputs/textField/textField";
+import { TextField } from '@libs/ui/inputs/textField/textField';
+import { AuthorEdit } from "../../../components/authorEdit/authorEdit";
 
 @Component({
   selector: 'app-task-form',
-  imports: [TextField, ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorEdit],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css',
 })
 export class TaskForm implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
-  taskForm!: FormGroup;
   
-  task:Task | undefined;
+  taskForm!: FormGroup;
+  task: Task | undefined;
   taskId: string = this.activatedRoute.snapshot.params['id'];
+ 
+  private errorMessages: { [key: string]: string } = {
+    required: 'Ce champ est requis.',
+    minlength: 'Trop court.',
+    maxlength: 'Trop long.',
+    email: 'Email invalide.',
+    pattern: 'Format invalide.',
+    min: 'Valeur trop petite.',
+    max: 'Valeur trop grande.',
+  };
 
-  constructor(private fb: FormBuilder,private taskService: TasksService,
-    private router: Router) {
-    this.taskForm = this.fb.group({
-        titre: ['', [Validators.required, Validators.minLength(3)]],
-        description: [''],
-        dateLimite: [null],
-        emailAuteur: ['', [Validators.required, Validators.email]]
-    });
-  }
+  constructor(
+    private fb: FormBuilder,
+    private taskService: TasksService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    this.loadTask();
+  }
+
+  private initForm(): void {
+
     this.taskForm = this.fb.group({
       titre: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       auteur: this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(2)]],
-        email: ['', [Validators.required, Validators.email]]
-      })
+          nom: ['', [Validators.required, Validators.minLength(3)]],
+          prenom: ['', [Validators.required, Validators.minLength(3)]],
+          email: ['', [Validators.required, Validators.email]],
+      }),
     });
+    
+  }
 
-    this.LoadTask();
-  }
-  getError(controlName: string): string {
-    const control = this.taskForm.get(controlName);
-    if (control?.invalid && control?.touched) {
-      if (control.hasError('required')) return 'Ce champ est requis.';
-      if (control.hasError('minlength')) return 'Trop court.';
-      if (control.hasError('email')) return 'Email invalide.';
-    }
-    return '';
-  }
-  LoadTask() {
-    if(!this.taskId)
-      return;
+  private loadTask(): void {
+    if (!this.taskId) return;
 
     this.taskService.getTaskById(this.taskId).subscribe((data) => {
       this.task = data;
+      this.taskForm.patchValue({
+        ...data
+      });
     });
   }
 
-  async onSubmit() {
-    const formData = this.taskForm.value;
-    console.log(formData);
-    //if(this.taskForm.valid) {
-    //  if(this.taskId)
-    //    await this.putTask(formData);
-    //  else
-    //    await this.postTask(formData);
-    //}
+  getError(controlName: string): string {
+    const control = this.taskForm.get(controlName);
+    if (control?.invalid && (control?.touched || control?.dirty)) {
+      const errorKey = Object.keys(control.errors || {})[0];
+      return this.errorMessages[errorKey] || 'Erreur de validation.';
+    }
+    return '';
   }
 
-  private async postTask(task: Task) {
+  onSubmit(): void {
+    if (this.taskForm.invalid) {
+      this.taskForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.taskForm.value;
+
+    if (this.taskId) {
+      this.putTask({ ...formValue, _id: this.taskId });
+    } else {
+      this.postTask(formValue);
+    }
+  }
+
+  private postTask(task: Task): void {
     this.taskService.postTask(task).subscribe((data) => {
       this.router.navigate(['/tasks/', data._id]);
     });
   }
 
-  private async putTask(task: Task) {
+  private putTask(task: Task): void {
     this.taskService.putTask(task).subscribe((data) => {
       this.router.navigate(['/tasks/', data._id]);
     });
-  } 
+  }
 }

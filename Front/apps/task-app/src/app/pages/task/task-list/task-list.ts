@@ -4,7 +4,7 @@ import { Task } from '../../../models/task.model';
 import { TasksService } from '../../../core/service/tasks.service';
 import { RouterLink } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
-import { Loader } from '../../../../../../../libs/ui/loader/loader';
+import { Loader } from '@libs/ui/loader/loader';
 
 @Component({
   selector: 'app-task-list',

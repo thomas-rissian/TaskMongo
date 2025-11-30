@@ -1,48 +1,21 @@
-<div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg mt-10">
-  
-  <h2 class="text-2xl font-bold mb-6 text-gray-800">Nouvelle Tâche</h2>
+<form [formGroup]="taskForm">
 
-  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-    
-    <!-- AJOUT DE type="text" ICI -->
     <app-text-field
-      title="Titre"
-      type="text" 
-      placeholder="Ex: Acheter du lait"
-      formControlName="titre"
-      [error]="getError('titre')">
-    </app-text-field>
+    title="Titre"
+    type="text"
+    placeholder="titre..."
+    [formControl]="$any(taskForm.get('titre'))"
+    error="{{getError('titre')}}"/>
 
-    <!-- AJOUT DE type="text" ICI -->
-    <app-text-field
+  <app-text-field
       title="Description"
       type="text"
-      placeholder="Détails de la tâche..."
-      formControlName="description">
-    </app-text-field>
+      placeholder="titre..."
+      [formControl]="$any(taskForm.get('description'))"
+      error="{{getError('description')}}"/>
 
-    <!-- Celui-ci était bon -->
-    <app-text-field
-      title="Date Limite"
-      type="date"
-      placeholder=""
-      formControlName="dateLimite">
-    </app-text-field>
+  <app-author-edit [authorGroup]="$any(taskForm.get('auteur'))" 
+    [getError]="getError.bind(this)"/>
 
-    <!-- Celui-ci était bon -->
-    <app-text-field
-      title="Email de l'auteur"
-      type="email"
-      placeholder="john@doe.com"
-      formControlName="emailAuteur"
-      [error]="getError('emailAuteur')">
-    </app-text-field>
+</form>
 
-    <button 
-      type="submit"
-      class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-      [disabled]="taskForm.invalid">
-      Créer la tâche
-    </button>
-  </form>
-</div>

@@ -1,0 +1,40 @@
+<app-editable-container 
+  title="Auteur"
+  (modeChange)="onModeChange($event)"
+  (save)="onSave()"
+  (cancel)="onCancel()"
+  [canSave]="authorGroup.valid"
+  >
+  
+  <ng-template #viewMode>
+    <ul>
+      <li> nom : {{ authorGroup.get('nom')?.value }}</li>
+      <li> prenom : {{ authorGroup.get('prenom')?.value }}</li>
+      <li> email : {{ authorGroup.get('email')?.value }}</li>
+    </ul>
+  </ng-template>
+
+  <ng-template #editMode>
+    <app-text-field
+      title="Nom"
+      type="text"
+      placeholder="Nom de l'auteur..."
+      [formControl]="$any(authorGroup.get('nom'))"
+      error="{{getAuthorError('nom')}}"/>
+
+    <app-text-field
+      title="Prénom"
+      type="text"
+      placeholder="Prénom de l'auteur..."
+      [formControl]="$any(authorGroup.get('prenom'))"
+      error="{{getAuthorError('prenom')}}"/>
+      
+    <app-text-field
+      title="Email"
+      type="email"
+      placeholder="Email de l'auteur..."
+      [formControl]="$any(authorGroup.get('email'))"
+      error="{{getAuthorError('email')}}"/>
+  </ng-template>
+
+</app-editable-container>

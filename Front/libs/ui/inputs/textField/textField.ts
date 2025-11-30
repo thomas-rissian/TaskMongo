@@ -1,24 +1,38 @@
 import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+export type InputType = 
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'number'
+  | 'date'
+  | 'datetime-local'
+  | 'time'
+  | 'tel'
+  | 'url'
+  | 'search'
+  | 'color'
+  | 'range'
+  | 'month'
+  | 'week';
 
 @Component({
   selector: 'app-text-field',
   standalone: true,
-  imports: [],
   templateUrl: './textField.html',
   styleUrl: './textField.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TextField),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
+
 export class TextField implements ControlValueAccessor {
   @Input({required: true}) placeholder: string = 'Enter text here';
-  @Input({required: true}) type: string = 'text';
+  @Input({required: true}) type: InputType = 'text';
   @Input({required: true}) title: string = 'Text Field';
   @Input() error: string = '';
 
@@ -27,7 +41,6 @@ export class TextField implements ControlValueAccessor {
 
   onChange = (value: any) => {};
   onTouched = () => {};
-
 
   writeValue(obj: any): void {
     this.value = obj || '';
