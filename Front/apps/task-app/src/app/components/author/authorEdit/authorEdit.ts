@@ -8,7 +8,6 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
   selector: 'app-author-edit',
   imports: [EditableContainer, TextField, FormsModule, ReactiveFormsModule],
   templateUrl: './authorEdit.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorEdit { 
   @Input({ required: true }) authorGroup!: FormGroup;

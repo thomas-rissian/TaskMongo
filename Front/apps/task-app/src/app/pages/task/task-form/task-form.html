@@ -18,5 +18,9 @@
       [authorGroup]="$any(taskForm.get('auteur'))"
       [getError]="getError.bind(this)"/>
 
+    <app-comment
+      [commentForm]="$any(taskForm.get('commentaires'))"
+      [getError]="getError.bind(this)"/>
+
 </form>
 

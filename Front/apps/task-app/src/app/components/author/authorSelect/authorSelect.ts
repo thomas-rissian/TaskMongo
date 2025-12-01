@@ -9,7 +9,6 @@ import { AuthorEdit } from "../authorEdit/authorEdit";
   selector: 'app-author-select',
   imports: [SelectField, FormsModule, ReactiveFormsModule, AuthorEdit],
   templateUrl: './authorSelect.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorSelect {
   IsAuthorFormVisible: boolean = false;

@@ -3,7 +3,7 @@
 # API 
 Créez un .env avec : 
 ```
-    DATABASE_URL = "mongodb:// 10.79.49.64:27017/taskmongo"
+    DATABASE_URL = "mongodb://localhost:27017/taskmongo"
 ```
 démarer le serveur : 
 

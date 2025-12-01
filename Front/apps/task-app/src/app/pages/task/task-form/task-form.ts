@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from '../../../models/task.model';
 import { TasksService } from '../../../core/service/tasks.service';
 import { TextField } from '@libs/ui/inputs/textField/textField';
-import { AuthorEdit } from "../../../components/author/authorEdit/authorEdit";
-import { SelectField } from "@libs/ui/inputs/selectField/selectField";
 import { AuthorSelect } from "../../../components/author/authorSelect/authorSelect";
+import { TextAreaField } from '../../../../../../../libs/ui/inputs/textAreaField/textAreaField';
+import { Comment } from "../../../components/comment/comment";
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorEdit, AuthorSelect],
+  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorSelect, TextAreaField, Comment],
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit {
@@ -52,6 +52,8 @@ export class TaskForm implements OnInit {
           prenom: ['', [Validators.required, Validators.minLength(3)]],
           email: ['', [Validators.required, Validators.email]],
       }),
+      commentaires: this.fb.array([]),
+
     });
     
   }
