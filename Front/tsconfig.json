@@ -16,7 +16,12 @@
     "module": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@task-app/": ["./apps/task-app/src/app/"],
+      "@task-app/components/*": ["./apps/task-app/src/app/components/*"],
+      "@task-app/core/*": ["./apps/task-app/src/app/core/*"],
+      "@task-app/models/*": ["./apps/task-app/src/app/models/*"],
+      "@task-app/pages/*": ["./apps/task-app/src/app/pages/*"]
     }
   },
   "angularCompilerOptions": {

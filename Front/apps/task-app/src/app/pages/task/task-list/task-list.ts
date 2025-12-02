@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task } from '../../../models/task.model';
-import { TasksService } from '../../../core/service/tasks.service';
 import { RouterLink } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
-import { Loader } from '@libs/ui/loader/loader';
+import { TasksService } from '@task-app/core/service/tasks.service';
+import { Loader } from '@libs/ui/component.lib.include';
+import { Task } from '@task-app/models/task.model';
 
 @Component({
   selector: 'app-task-list',

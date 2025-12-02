@@ -1,22 +1,23 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Task } from '../../../models/task.model';
-import { TasksService } from '../../../core/service/tasks.service';
-import { TextField } from '@libs/ui/inputs/textField/textField';
-import { AuthorSelect } from "../../../components/author/authorSelect/authorSelect";
-import { TextAreaField } from '../../../../../../../libs/ui/inputs/textAreaField/textAreaField';
-import { Comment } from "../../../components/comment/comment";
+import { PRIORITY, STATUS, Task } from '@task-app/models/model.include.model';
+import { Comment, AuthorSelect } from '@task-app/components/component.include';
+import { TasksService } from '@task-app/core/service/tasks.service';
+import { arrayValidator } from '@task-app/core/validator/array.validator';
+import { SelectSimpleField, TextField } from '@libs/ui/component.lib.include';
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorSelect, TextAreaField, Comment],
+  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorSelect, SelectSimpleField, Comment],
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
-  
+  PRIORITY: string[] = PRIORITY;
+  STATUS: string[] = STATUS;
+
   taskForm!: FormGroup;
   task: Task | undefined;
   taskId: string = this.activatedRoute.snapshot.params['id'];
@@ -53,9 +54,9 @@ export class TaskForm implements OnInit {
           email: ['', [Validators.required, Validators.email]],
       }),
       commentaires: this.fb.array([]),
-
+      status: ['', [Validators.required, arrayValidator(STATUS)]],
+      priorite: ['', [Validators.required, arrayValidator(PRIORITY)]],
     });
-    
   }
 
   private loadTask(): void {

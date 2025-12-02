@@ -22,5 +22,12 @@
       [commentForm]="$any(taskForm.get('commentaires'))"
       [getError]="getError.bind(this)"/>
 
+    <app-select-simple-field
+      errorField="priorite"
+      [errorFunc]="getError.bind(this)"
+      [listField]="PRIORITY"
+      [formControl]="$any(taskForm.get('priorite'))"/>
+    
+    
 </form>
 

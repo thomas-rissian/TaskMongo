@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
-import { TasksService } from '../../../core/service/tasks.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Task } from '../../../models/task.model';
-import { Loader } from '@libs/ui/loader/loader';
+import { Loader } from '@libs/ui/component.lib.include';
+import { TasksService } from '@task-app/core/service/tasks.service';
+import { Task } from '@task-app/models/task.model';
 
 @Component({
   selector: 'app-task-detail',
