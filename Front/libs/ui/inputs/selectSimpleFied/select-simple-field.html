@@ -1,56 +1,54 @@
 <div class="relative w-full min-w-[200px]">
+  @if (error) {
+    <p class="mt-1 text-xs text-red-600">{{ error }}</p>
+  }
   <div
     class="flex justify-between items-center px-4 py-2.5 border border-gray-300 rounded-lg bg-white cursor-pointer hover:border-gray-500 transition-colors"
     (click)="toggleOpen()"
     [attr.aria-disabled]="isDisabled">
     <span class="text-gray-700">
-      <ng-container *ngIf="value; else placeholder">
-        <!-- if paramData present and value is an object, show the keys values -->
-        <ng-container *ngIf="paramData?.length && value && typeof value === 'object'; else plainValue">
-          <ng-container *ngFor="let key of paramData">
+      @if (value) {
+        @if (paramData.length && value && typeof value === 'object') {
+          @for (key of paramData; track key) {
             {{ value[key] }}&nbsp;
-          </ng-container>
-        </ng-container>
-        <ng-template #plainValue>
+          }
+        } @else {
           {{ value }}
-        </ng-template>
-      </ng-container>
-      <ng-template #placeholder>
+        }
+      } @else {
         Sélectionner...
-      </ng-template>
+      }
     </span>
     <span class="text-xs transition-transform duration-200" [class.rotate-180]="isOpen">▼</span>
   </div>
 
-  <div *ngIf="isOpen">
+  @if (isOpen) {
     <ul class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg max-h-52 overflow-y-auto z-50 shadow-lg">
       <li
         class="px-4 py-2.5 cursor-pointer hover:bg-gray-100 transition-colors first:rounded-t-lg last:rounded-b-lg"
-        [class.bg-blue-100]="equals(value, 'None')"
-        [class.font-medium]="equals(value, 'None')"
+        [class.bg-blue-100]="equals(value, null)"
+        [class.font-medium]="equals(value, null)"
         (click)="selectNone()">
         None
       </li>
 
-      <!-- either iterate listField (strings) or data (objects) -->
-      <li
-        *ngFor="let item of (listField?.length ? listField : data)"
-        class="px-4 py-2.5 cursor-pointer hover:bg-gray-100 transition-colors first:rounded-t-lg last:rounded-b-lg"
-        [class.bg-blue-100]="equals(value, item)"
-        [class.font-medium]="equals(value, item)"
-        (click)="selectItem(item)">
-        <!-- if paramData exist and item is object, show fields, else show item -->
-        <ng-container *ngIf="paramData?.length && item && typeof item === 'object'; else showItemValue">
-          <ng-container *ngFor="let key of paramData">
-            {{ item[key] }}&nbsp;
-          </ng-container>
-        </ng-container>
-        <ng-template #showItemValue>
-          {{ item }}
-        </ng-template>
-      </li>
+      @for (item of (listField.length ? listField : data); track item) {
+        <li
+          class="px-4 py-2.5 cursor-pointer hover:bg-gray-100 transition-colors first:rounded-t-lg last:rounded-b-lg"
+          [class.bg-blue-100]="equals(value, item)"
+          [class.font-medium]="equals(value, item)"
+          (click)="selectItem(item)">
+          @if (paramData.length && item && typeof item === 'object') {
+            @for (key of paramData; track key) {
+              {{ item }}&nbsp;
+            }
+          } @else {
+            {{ item }}
+          }
+        </li>
+      }
     </ul>
-  </div>
+  }
 
-  <p *ngIf="error" class="mt-1 text-xs text-red-600">{{ error }}</p>
+  
 </div>

@@ -5,7 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-select-simple-field',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule ],
   templateUrl: './select-simple-field.html',
   providers: [
     {
@@ -21,9 +21,10 @@ export class SelectSimpleField implements ControlValueAccessor {
   error = '';
   isDisabled = false;
 
-  @Input({ required: true }) data: any[] = [];
-  @Input({ required: true }) listField: string[] = [];
-  @Input({ required: false }) paramData: string[] = [];
+  // Now optional inputs
+  @Input() data: any[] = [];
+  @Input() listField: string[] = [];
+  @Input() paramData: string[] = [];
 
   @Input() errorField = '';
   @Input() errorFunc?: (field: string) => string;
@@ -34,35 +35,32 @@ export class SelectSimpleField implements ControlValueAccessor {
   private onTouchedFn: () => void = () => {};
 
   toggleOpen() {
-    if (this.isDisabled) return; // CORRECTION: stop if disabled
+    if (this.isDisabled) return;
     this.isOpen = !this.isOpen;
   }
 
   selectItem(item: any) {
-    if (this.isDisabled) return; // CORRECTION: stop if disabled
+    if (this.isDisabled) return;
     this.value = item;
     this.isOpen = false;
     this.onChangeFn(item);
     this.onTouchedFn();
     this.updateError();
     this.noneSelect.emit(false);
-    console.log('[SelectSimpleField] selectItem', { item, value: this.value, error: this.error });
   }
 
   selectNone() {
-    if (this.isDisabled) return; // CORRECTION: stop if disabled
+    if (this.isDisabled) return;
     this.value = null;
     this.isOpen = false;
     this.onChangeFn(null);
     this.onTouchedFn();
     this.updateError();
     this.noneSelect.emit(true);
-    console.log('[SelectSimpleField] selectNone', { value: this.value, error: this.error });
   }
 
   writeValue(obj: any): void {
     this.value = obj ?? null;
-    // Mise à jour de l'erreur en micro-tâche pour éviter "ExpressionChangedAfterItHasBeenCheckedError"
     Promise.resolve().then(() => this.updateError());
   }
 
@@ -83,6 +81,7 @@ export class SelectSimpleField implements ControlValueAccessor {
   }
 
   equals(a: any, b: any): boolean {
+    if (a == null && b == null) return true;
     if (a === b) return true;
     if (a && b && typeof a === 'object' && typeof b === 'object') {
       return JSON.stringify(a) === JSON.stringify(b);
