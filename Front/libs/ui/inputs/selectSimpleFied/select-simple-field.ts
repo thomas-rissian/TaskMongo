@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -20,8 +20,8 @@ export class SelectSimpleField implements ControlValueAccessor {
   value: any = null;
   error = '';
   isDisabled = false;
-
-  // Now optional inputs
+  
+  @Input() title = '';
   @Input() data: any[] = [];
   @Input() listField: string[] = [];
   @Input() paramData: string[] = [];
@@ -33,6 +33,8 @@ export class SelectSimpleField implements ControlValueAccessor {
 
   private onChangeFn: (v: any) => void = () => {};
   private onTouchedFn: () => void = () => {};
+
+  constructor(private elementRef: ElementRef) {}
 
   toggleOpen() {
     if (this.isDisabled) return;
@@ -87,5 +89,16 @@ export class SelectSimpleField implements ControlValueAccessor {
       return JSON.stringify(a) === JSON.stringify(b);
     }
     return false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (this.isDisabled) return;
+    const target = event.target as Node;
+    if (!this.elementRef.nativeElement.contains(target) && this.isOpen) {
+      this.isOpen = false;
+      this.onTouchedFn();
+      this.updateError();
+    }
   }
 }

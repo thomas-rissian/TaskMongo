@@ -23,11 +23,18 @@
       [getError]="getError.bind(this)"/>
 
     <app-select-simple-field
+      title="Priorité"
       errorField="priorite"
       [errorFunc]="getError.bind(this)"
       [listField]="PRIORITY"
       [formControl]="$any(taskForm.get('priorite'))"/>
     
-    
+    <app-select-simple-field
+    title="Status"
+      errorField="status"
+      [errorFunc]="getError.bind(this)"
+      [listField]="STATUS"
+      [formControl]="$any(taskForm.get('status'))"/>
+
 </form>
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
 import {  NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -22,7 +22,8 @@ export class SelectField {
   @Input({required:true})paramData : string[] = [];
 
   @Output() noneSelect = new EventEmitter<boolean>();
-
+  constructor(private elementRef: ElementRef) {} 
+  
   toggleOpen() {
     this.isOpen = !this.isOpen;
   }
@@ -36,5 +37,13 @@ export class SelectField {
     this.value = { [this.paramData?.[0] ?? 'none']: "none" };
     this.isOpen = false;
     this.noneSelect.emit(true);
+  }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as Node;
+    if (!this.elementRef.nativeElement.contains(target) && this.isOpen) {
+      this.isOpen = false;
+    }
+
   }
 }

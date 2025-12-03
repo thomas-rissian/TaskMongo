@@ -1,4 +1,7 @@
 <div class="relative w-full min-w-[200px]">
+  @if (title) {
+    <label class="block mb-1 text-sm font-medium text-gray-700">{{ title }}</label>
+  }
   @if (error) {
     <p class="mt-1 text-xs text-red-600">{{ error }}</p>
   }
