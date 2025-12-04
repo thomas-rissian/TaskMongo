@@ -15,7 +15,6 @@ export class AuthorSelect {
   
   @Input({ required: true }) authorGroup!: FormGroup;
   @Input({ required: true })
-  getError!: (error: string) => string;
 
   authorList : Author[] = [];
   

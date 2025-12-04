@@ -22,16 +22,6 @@ export class TaskForm implements OnInit {
   task: Task | undefined;
   taskId: string = this.activatedRoute.snapshot.params['id'];
  
-  private errorMessages: { [key: string]: string } = {
-    required: 'Ce champ est requis.',
-    minlength: 'Trop court.',
-    maxlength: 'Trop long.',
-    email: 'Email invalide.',
-    pattern: 'Format invalide.',
-    min: 'Valeur trop petite.',
-    max: 'Valeur trop grande.',
-  };
-
   constructor(
     private fb: FormBuilder,
     private taskService: TasksService,
@@ -69,15 +59,6 @@ export class TaskForm implements OnInit {
         ...data
       });
     });
-  }
-
-  getError(controlName: string): string {
-    const control = this.taskForm.get(controlName);
-    if (control?.invalid && (control?.touched || control?.dirty)) {
-      const errorKey = Object.keys(control.errors || {})[0];
-      return this.errorMessages[errorKey] || 'Erreur de validation.';
-    }
-    return '';
   }
 
   onSubmit(): void {

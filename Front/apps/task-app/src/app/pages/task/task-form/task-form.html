@@ -13,12 +13,10 @@
       [formControl]="$any(taskForm.get('description'))"/>
 
     <app-author-select 
-      [authorGroup]="$any(taskForm.get('auteur'))"
-      [getError]="getError.bind(this)"/>
+      [authorGroup]="$any(taskForm.get('auteur'))"/>
 
     <app-comment
-      [commentForm]="$any(taskForm.get('commentaires'))"
-      [getError]="getError.bind(this)"/>
+      [commentForm]="$any(taskForm.get('commentaires'))"/>
 
     <app-select-simple-field
       title="Priorité"

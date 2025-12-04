@@ -11,15 +11,9 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class AuthorEdit { 
   @Input({ required: true }) authorGroup!: FormGroup;
-  @Input() error: string = "";
-  @Input({ required: true })
-  getError!: (error: string) => string;
 
   private savedValues: Author| undefined = undefined;
 
-  getAuthorError(controlName: string): string {
-    return this.getError("auteur." + controlName) || "";
-  }
 
   onModeChange(isEditing: boolean): void {
     if (isEditing) {

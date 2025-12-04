@@ -7,6 +7,8 @@ export const routes: Routes = [
   {path: 'tasks', loadComponent: () => import('./pages/task/task-list/task-list').then(m => m.TaskList), pathMatch: 'full' },
   {path: 'tasks/create', loadComponent: () => import('./pages/task/task-form/task-form').then(m => m.TaskForm), pathMatch: 'full' },
   {path: 'tasks/:id', loadComponent: () => import('./pages/task/task-detail/task-detail').then(m => m.TaskDetail), pathMatch: 'full' },
+  {path: 'tasks/:id/edit', loadComponent: () => import('./pages/task/task-form/task-form').then(m => m.TaskForm), pathMatch: 'full' },
+
 ];
 
 @NgModule({
