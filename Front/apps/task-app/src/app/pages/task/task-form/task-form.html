@@ -1,18 +1,16 @@
-<form [formGroup]="taskForm">
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
 
-    <app-text-field
+  <app-text-field
     title="Titre"
     type="text"
     placeholder="titre..."
-    [formControl]="$any(taskForm.get('titre'))"
-    error="{{getError('titre')}}"/>
+    [formControl]="$any(taskForm.get('titre'))"/>
 
   <app-text-field
       title="Description"
       type="text"
       placeholder="titre..."
-      [formControl]="$any(taskForm.get('description'))"
-      error="{{getError('description')}}"/>
+      [formControl]="$any(taskForm.get('description'))"/>
 
     <app-author-select 
       [authorGroup]="$any(taskForm.get('auteur'))"
@@ -25,16 +23,16 @@
     <app-select-simple-field
       title="Priorité"
       errorField="priorite"
-      [errorFunc]="getError.bind(this)"
       [listField]="PRIORITY"
       [formControl]="$any(taskForm.get('priorite'))"/>
     
     <app-select-simple-field
     title="Status"
       errorField="status"
-      [errorFunc]="getError.bind(this)"
       [listField]="STATUS"
       [formControl]="$any(taskForm.get('status'))"/>
 
+
+      <button type="submit" >Save</button>
 </form>
 

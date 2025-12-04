@@ -1,6 +1,8 @@
-import { Component, EventEmitter, forwardRef, Input, Output, ElementRef, HostListener } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, ElementRef, HostListener, Injector, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, AbstractControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ErrorMessageService } from '../../../core/service/validator/errorMessage.service';
 
 @Component({
   selector: 'app-select-simple-field',
@@ -15,7 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class SelectSimpleField implements ControlValueAccessor {
+export class SelectSimpleField implements ControlValueAccessor, OnInit, OnDestroy {
   isOpen = false;
   value: any = null;
   error = '';
@@ -26,15 +28,39 @@ export class SelectSimpleField implements ControlValueAccessor {
   @Input() listField: string[] = [];
   @Input() paramData: string[] = [];
 
-  @Input() errorField = '';
-  @Input() errorFunc?: (field: string) => string;
-
   @Output() noneSelect = new EventEmitter<boolean>();
 
   private onChangeFn: (v: any) => void = () => {};
   private onTouchedFn: () => void = () => {};
 
-  constructor(private elementRef: ElementRef) {}
+  private subs: Subscription[] = [];
+  private ngControlRef?: NgControl | null;
+
+  constructor(private elementRef: ElementRef, private injector: Injector, private cd: ChangeDetectorRef, private errorMessageService: ErrorMessageService) {}
+
+  ngOnInit(): void {
+    this.ngControlRef = this.injector.get(NgControl, null);
+    if (this.ngControlRef) {
+      this.ngControlRef.valueAccessor = this;
+    }
+
+    const c = this.control;
+    if (!c) return;
+    if (c.statusChanges) this.subs.push(c.statusChanges.subscribe(() => this.cd.markForCheck()));
+    if (c.valueChanges) this.subs.push(c.valueChanges.subscribe(() => this.cd.markForCheck()));
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((s) => s.unsubscribe());
+  }
+
+  get control(): AbstractControl | null {
+    return this.ngControlRef?.control ?? null;
+  }
+
+  get errorMessage(): string {
+    return this.errorMessageService.getMessage(this.control);
+  }
 
   toggleOpen() {
     if (this.isDisabled) return;
@@ -79,7 +105,7 @@ export class SelectSimpleField implements ControlValueAccessor {
   }
 
   private updateError(): void {
-    this.error = this.errorFunc ? (this.errorFunc(this.errorField) ?? '') : '';
+    this.error = this.errorMessageService.getMessage(this.control);
   }
 
   equals(a: any, b: any): boolean {

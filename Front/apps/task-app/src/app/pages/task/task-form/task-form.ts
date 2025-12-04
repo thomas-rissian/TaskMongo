@@ -44,7 +44,7 @@ export class TaskForm implements OnInit {
   }
 
   private initForm(): void {
-
+    
     this.taskForm = this.fb.group({
       titre: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
@@ -57,6 +57,7 @@ export class TaskForm implements OnInit {
       status: ['', [Validators.required, arrayValidator(STATUS)]],
       priorite: ['', [Validators.required, arrayValidator(PRIORITY)]],
     });
+  
   }
 
   private loadTask(): void {

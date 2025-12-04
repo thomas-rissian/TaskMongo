@@ -3,8 +3,8 @@
     {{ title }}
   </label>
 
-  @if (error) {
-    <p class="mt-1 text-xs text-red-600" role="alert">{{ error }}</p>
+  @if (errorMessage) {
+    <p class="mt-1 text-xs text-red-600" role="alert">{{ errorMessage }}</p>
   }
 
   <input
@@ -14,10 +14,10 @@
     [disabled]="isDisabled"
     (input)="onInput($event)"
     (blur)="onBlur()"
-    aria-invalid="{{ !!error }}"
+    [attr.aria-invalid]="!!errorMessage"
     class="appearance-none block w-full px-3 py-1.5 border rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-    [class.border-gray-200]="!error"
-    [class.border-red-300]="error"
+    [class.border-gray-200]="!errorMessage"
+    [class.border-red-300]="errorMessage"
     [class.bg-gray-50]="isDisabled"
   />
 </div>

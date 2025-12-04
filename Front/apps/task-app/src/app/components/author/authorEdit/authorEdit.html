@@ -19,22 +19,19 @@
       title="Nom"
       type="text"
       placeholder="Nom de l'auteur..."
-      [formControl]="$any(authorGroup.get('nom'))"
-      error="{{getAuthorError('nom')}}"/>
+      [formControl]="$any(authorGroup.get('nom'))"/>
 
     <app-text-field
       title="Prénom"
       type="text"
       placeholder="Prénom de l'auteur..."
-      [formControl]="$any(authorGroup.get('prenom'))"
-      error="{{getAuthorError('prenom')}}"/>
+      [formControl]="$any(authorGroup.get('prenom'))"/>
       
     <app-text-field
       title="Email"
       type="email"
       placeholder="Email de l'auteur..."
-      [formControl]="$any(authorGroup.get('email'))"
-      error="{{getAuthorError('email')}}"/>
+      [formControl]="$any(authorGroup.get('email'))"/>
   </ng-template>
 
 </app-editable-container>

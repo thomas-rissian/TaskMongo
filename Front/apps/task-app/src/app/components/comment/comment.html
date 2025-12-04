@@ -3,8 +3,7 @@
         title="Commentaire"
         placeholder="Commentaire..."
         [value]="newCommentText"
-        (valueChange)="newCommentText = $event"
-        error="{{error}}"/>
+        (valueChange)="newCommentText = $event"/>
   <button (click)="addComment()"> Add Comment </button>
 
   @for (item of getCommentText(); track $index) {
@@ -23,7 +22,6 @@
           placeholder="Commentaire..."
           (valueChange)="updateNewCommentText($index, $event)"
           [value]="getNewCommentText($index)"
-          error="{{error}}"
           
           />
       </ng-template>
