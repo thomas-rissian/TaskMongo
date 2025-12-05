@@ -13,8 +13,8 @@ import { AuthorEdit } from "../authorEdit/authorEdit";
 export class AuthorSelect {
   IsAuthorFormVisible: boolean = false;
   
-  @Input({ required: true }) authorGroup!: FormGroup;
-  @Input({ required: true })
+  @Input({ required: true }) 
+  authorGroup!: FormGroup;
 
   authorList : Author[] = [];
   

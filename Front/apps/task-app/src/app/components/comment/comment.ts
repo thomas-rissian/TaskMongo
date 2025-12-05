@@ -12,7 +12,6 @@ import { EditableContainer } from '@libs/ui/inputs/EditableContainer/EditableCon
 })
 export class Comment {
   @Input({required: true}) commentForm!: FormGroup;
-  @Input({required: true}) getError!: (error: string) => string;
   error: string = "";
   newCommentText: string = "";
 
