@@ -5,25 +5,29 @@
     </span>
   </div>
 
-  <div class="flex items-center justify-between mb-2">
-    <a [routerLink]="['/tasks', task._id]" class="block hover:text-blue-600" (click)="$event.stopPropagation()">
-      <h3 class="font-semibold text-sm text-gray-900 line-clamp-2">{{ task.titre }}</h3>
+  <div class="flex items-start justify-between mb-2 gap-2">
+    <!-- Title: allow shrinking and clamping so it doesn't push the action buttons -->
+    <a [routerLink]="['/tasks', task._id]" class="block hover:text-blue-600 flex-1 min-w-0" (click)="$event.stopPropagation()" [attr.title]="task.titre" [attr.aria-label]="task.titre">
+      <h3 class="font-semibold text-sm text-gray-900 line-clamp-2 wrap-break-word">{{ task.titre }}</h3>
     </a>
-    
-    <button
-      class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
-      (click)="onEditClick($event)"
-      aria-label="Edit task"
-    >
-      Edit
-    </button>
-    <button
-      class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
-      (click)="onRemoveClick()"
-      aria-label="Remove task"
-    >
-      Supprimer
-    </button>
+
+    <!-- Actions: fixed-size group that won't be pushed by the title -->
+    <div class="flex items-center gap-2 shrink-0">
+      <button
+        class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
+        (click)="onEditClick($event)"
+        aria-label="Edit task"
+      >
+        Edit
+      </button>
+      <button
+        class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
+        (click)="onRemoveClick()"
+        aria-label="Remove task"
+      >
+        Supprimer
+      </button>
+    </div>
   </div>
 
   @if (task.description) {

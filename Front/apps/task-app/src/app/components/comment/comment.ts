@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TaskEditableContainer } from '@libs/ui/inputs/TaskEditableContainer/TaskEditableContainer';
+import { TextAreaField } from '@libs/ui/component.lib.include';
 
 @Component({
   selector: 'app-comment',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, TaskEditableContainer],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, TaskEditableContainer, TextAreaField],
   templateUrl: './comment.html'
 })
 export class Comment {

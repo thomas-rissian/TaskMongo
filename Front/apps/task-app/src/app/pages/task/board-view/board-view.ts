@@ -5,7 +5,7 @@ import { Task } from '@task-app/models/task.model';
 import { STATUS } from '@task-app/models/status.model';
 import { StatusColumnComponent } from '../../../components/tasks/board/status-column/status-column.component';
 import { Loader } from '@libs/ui/component.lib.include';
-import { TaskForm } from '../../../components/tasks/form/task-form';
+import { TaskForm } from '../../../components/tasks/task-form/task-form';
 
 @Component({
   selector: 'app-board-view',

@@ -8,8 +8,8 @@ export const routes: Routes = [
 
   // more specific routes first
   
-  { path: 'tasks/create', loadComponent: () => import('./pages/task/task-form/task-form').then(m => m.TaskForm) },
-  { path: 'tasks/:id/edit', loadComponent: () => import('./pages/task/task-form/task-form').then(m => m.TaskForm) },
+  { path: 'tasks/create', loadComponent: () => import('./components/tasks/task-form/task-form').then(m => m.TaskForm) },
+  { path: 'tasks/:id/edit', loadComponent: () => import('./components/tasks/task-form/task-form').then(m => m.TaskForm) },
   { path: 'tasks/:id', loadComponent: () => import('./pages/task/task-detail/task-detail').then(m => m.TaskDetail) },
 
   // list

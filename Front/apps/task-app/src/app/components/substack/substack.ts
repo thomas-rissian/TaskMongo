@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, Input, ChangeDetectorRef } from '@a
 import { FormArray, FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SelectSimpleField } from '@libs/ui/inputs/selectSimpleFied/select-simple-field';
+import { SelectSimpleField, TextField } from '@libs/ui/component.lib.include';
 import { TaskEditableContainer } from '@libs/ui/inputs/TaskEditableContainer/TaskEditableContainer';
 
 @Component({
   selector: 'app-substack',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, SelectSimpleField, TaskEditableContainer],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, SelectSimpleField, TaskEditableContainer, TextField],
   templateUrl: './substack.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

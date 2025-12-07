@@ -1,11 +1,12 @@
 <div class="space-y-4">
   <div>
     <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
-    <textarea
-      class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white text-sm leading-relaxed min-h-[100px] resize-vertical transition-all duration-200 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+    <app-text-area-field
+      class="w-full"
+      title="Nouveau commentaire"
       placeholder="Commentaire..."
-      [(ngModel)]="newCommentText">
-    </textarea>
+      [(ngModel)]="newCommentText" [ngModelOptions]="{standalone: true}">
+    </app-text-area-field>
   </div>
   
   <button 
@@ -15,7 +16,6 @@
     + Ajouter Commentaire
   </button>
 
-  <!-- iterate over FormArray controls -->
   @for (ctrl of getControls(); track $index) {
     <app-task-editable-container
       [title]="(ctrl.get('auteur.nom')?.value || '') + ' ' + (ctrl.get('auteur.prenom')?.value || '')"
@@ -37,12 +37,14 @@
 
     <ng-template #editTemplate>
       <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
-      <textarea
-        class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white text-sm leading-relaxed min-h-[120px] resize-vertical transition-all duration-200 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        <app-text-area-field
+        class="w-full"
+        title="Éditer le commentaire"
         placeholder="Commentaire..."
-        [ngModel]="getNewCommentText($index)"
-        (ngModelChange)="updateNewCommentText($index, $event)">
-      </textarea>
+          [ngModel]="getNewCommentText($index)"
+          (ngModelChange)="updateNewCommentText($index, $event)"
+          [ngModelOptions]="{standalone: true}">
+      </app-text-area-field>
     </ng-template>
   }
 </div>

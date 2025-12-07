@@ -1,59 +1,65 @@
-import { Component, Inject, inject, Input, Output, EventEmitter, OnInit, Optional } from '@angular/core';
+import { Component, inject, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, FormControl, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PRIORITY, STATUS, Task } from '@task-app/models/model.include.model';
 import { Comment, AuthorSelect } from '@task-app/components/component.include';
 import { TasksService } from '@task-app/core/service/tasks.service';
 import { arrayValidator } from '@task-app/core/validator/array.validator';
-import { SelectSimpleField } from '@libs/ui/component.lib.include';
+import { SelectSimpleField, TextField, TextAreaField } from '@libs/ui/component.lib.include';
 import { Substack } from "@task-app/components/substack/substack";
 import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes, TextField, TextAreaField],
   templateUrl: './task-form.html',
 })
-export class TaskForm implements OnInit {
-  @Input() task: Task | null | undefined;
-  @Output() close = new EventEmitter<void>();
+export class TaskForm implements OnInit, OnChanges {
+  constructor() {
+    // Initialize the reactive form as early as possible so ngOnChanges
+    // and the template have a valid FormGroup instance available.
+    this.initForm();
+  }
 
+  @Output() close = new EventEmitter<void>();
+  
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private taskService = inject(TasksService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   PRIORITY: string[] = PRIORITY;
   STATUS: string[] = STATUS;
 
   taskForm!: FormGroup;
+  @Input() task: Task | null | undefined;
   taskId: string | undefined;
 
   ngOnInit(): void {
     this.initForm();
-    // If task passed via @Input (modal mode)
+    // If a task Input is present and has _id, initialize the form with it
     if (this.task && this.task._id) {
-      this.taskId = this.task._id;
-      const { commentaires, sousTaches, etiquettes, historiqueModifications, ...simple } = this.task as any;
-      this.taskForm.patchValue(simple);
-      this.taskForm.setControl('commentaires', this.fb.array((commentaires || []).map((c: any) => this.createCommentaireGroup(c))));
-      this.taskForm.setControl('sousTaches', this.fb.array((sousTaches || []).map((s: any) => this.createSousTacheGroup(s))));
-      this.taskForm.setControl('etiquettes', this.fb.array((etiquettes || []).map((tag: string) => this.fb.control(tag))));
+      this.loadForm();
       return;
     }
-
-    // If opened via route
-    this.taskId = this.activatedRoute.snapshot.params['id'] || undefined; 
+    this.taskId = this.activatedRoute.snapshot.params['id'] || undefined;
     if (this.taskId) {
       this.loadTask();
     }
   }
-constructor(
-    @Optional() @Inject(MatDialogRef) private dialogRef?: MatDialogRef<TaskForm>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: { task?: Task }
-  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // If form hasn't been initialized yet, make sure it exists
+    if (!this.taskForm) this.initForm();
+    if (changes['task'] && changes['task'].currentValue) {
+      this.task = changes['task'].currentValue;
+      this.loadForm();
+    }
+  }
+
   get titreControl(): FormControl { return this.taskForm.get('titre') as FormControl; }
   get descriptionControl(): FormControl { return this.taskForm.get('description') as FormControl; }
   get auteurGroup(): FormGroup { return this.taskForm.get('auteur') as FormGroup; }
@@ -75,6 +81,7 @@ constructor(
       commentaires: this.fb.array([]),
       sousTaches: this.fb.array([]),
       etiquettes: this.fb.array([]),
+      echeance: [null, [Validators.required]],
       statut: ['', [Validators.required, arrayValidator(STATUS)]],
       priorite: ['', [Validators.required, arrayValidator(PRIORITY)]],
     });
@@ -110,19 +117,34 @@ constructor(
   }
 
   private loadTask(): void {
-    if (!this.taskId) return;
+    if (!this.taskId){
+      this.loadForm();
+      return; 
+    }
 
     this.taskService.getTaskById(this.taskId).subscribe((data) => {
       this.task = data;
-      const { commentaires, sousTaches, etiquettes, historiqueModifications, ...simple } = data;
-      this.taskForm.patchValue(simple);
-
-      this.taskForm.setControl('commentaires', this.fb.array((commentaires || []).map((c: any) => this.createCommentaireGroup(c))));
-      this.taskForm.setControl('sousTaches', this.fb.array((sousTaches || []).map((s: any) => this.createSousTacheGroup(s))));
-      this.taskForm.setControl('etiquettes', this.fb.array((etiquettes || []).map((tag: string) => this.fb.control(tag))));
+      this.loadForm();
     });
   }
+  private loadForm(): void {
+    if (!this.task) {
+      this.taskForm.setControl('commentaires', this.fb.array([]));
+      this.taskForm.setControl('sousTaches', this.fb.array([]));
+      this.taskForm.setControl('etiquettes', this.fb.array([]));
+      this.cdr.detectChanges();
+      return;
+    }
+    const { commentaires, sousTaches, etiquettes, historiqueModifications, ...simple } = this.task;
+    simple.echeance = this.toInputDateValue((simple as any).echeance) ?? undefined;
+    this.taskForm.patchValue(simple);
 
+    this.taskForm.setControl('commentaires', this.fb.array((commentaires || []).map((c: any) => this.createCommentaireGroup(c))));
+    this.taskForm.setControl('sousTaches', this.fb.array((sousTaches || []).map((s: any) => this.createSousTacheGroup(s))));
+    this.taskForm.setControl('etiquettes', this.fb.array((etiquettes || []).map((tag: string) => this.fb.control(tag))));
+    this.cdr.detectChanges();
+
+  }
   onSubmit(): void {
     if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
@@ -135,6 +157,9 @@ constructor(
       ...s,
       echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
     }));
+
+    // convert root task echeance back to ISO for backend
+    payload.echeance = payload.echeance ? new Date(payload.echeance).toISOString() : null;
 
     payload.etiquettes = (payload.etiquettes ?? []).filter((tag: any) => tag && typeof tag === 'string');
 
@@ -152,34 +177,32 @@ constructor(
 
   private postTask(task: Task): void {
     this.taskService.postTask(task).subscribe((data) => {
-      if (this.task && this.task._id) {
-        // Modal mode
+      if (this.task) {
+        // Modal mode: emit close to let parent handle refreshing
         this.close.emit();
-      } else {
-        // Route mode
-        this.router.navigate(['/tasks/', data._id]);
+        return;
       }
+      // Route mode: navigate to created task
+      this.router.navigate(['/tasks/', data._id]);
     });
   }
 
   private putTask(task: Task): void {
     task._id = this.taskId;
     this.taskService.putTask(task).subscribe((data) => {
-      if (this.task && this.task._id) {
-        // Modal mode
+      if (this.task) {
         this.close.emit();
-      } else {
-        // Route mode
-        this.router.navigate(['/tasks/', data._id]);
+        return;
       }
+      this.router.navigate(['/tasks/', data._id]);
     });
   }
 
   cancel(): void {
-    if (this.task && this.task._id) {
+    if (this.task) {
       this.close.emit();
-    } else {
-      this.router.navigate(['/tasks']);
+      return;
     }
+    this.router.navigate(['/tasks']);
   }
 }

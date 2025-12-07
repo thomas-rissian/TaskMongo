@@ -26,6 +26,7 @@ export class SelectField implements ControlValueAccessor, OnInit, OnDestroy {
   @Input({required:true}) paramData : string[] = [];
 
   @Output() noneSelect = new EventEmitter<boolean>();
+  @Output() valueChange = new EventEmitter<any>();
 
   private onChangeFn: (v: any) => void = () => {};
   private onTouchedFn: () => void = () => {};
@@ -77,6 +78,7 @@ export class SelectField implements ControlValueAccessor, OnInit, OnDestroy {
     this.value = item;
     this.isOpen = false;
     this.noneSelect.emit(false);
+    this.valueChange.emit(item);
     this.onChangeFn(item);
     this.onTouchedFn();
     this.updateError();
@@ -85,6 +87,7 @@ export class SelectField implements ControlValueAccessor, OnInit, OnDestroy {
     this.value = { [this.paramData?.[0] ?? 'none']: "none" };
     this.isOpen = false;
     this.noneSelect.emit(true);
+    this.valueChange.emit(this.value);
     this.onChangeFn(this.value);
     this.onTouchedFn();
     this.updateError();
