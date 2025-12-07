@@ -4,13 +4,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule } from '@angular/core';
 
 @NgModule({
-  // ...existing code...
   imports: [
-    // ...existing imports...
     BrowserAnimationsModule,
     MatDialogModule,
   ],
-  // ...existing code...
 })
 export class AppModule {}
-// ...existing code...

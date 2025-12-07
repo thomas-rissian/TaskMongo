@@ -18,8 +18,6 @@ import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
 })
 export class TaskForm implements OnInit, OnChanges {
   constructor() {
-    // Initialize the reactive form as early as possible so ngOnChanges
-    // and the template have a valid FormGroup instance available.
     this.initForm();
   }
 
@@ -40,7 +38,6 @@ export class TaskForm implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initForm();
-    // If a task Input is present and has _id, initialize the form with it
     if (this.task && this.task._id) {
       this.loadForm();
       return;
@@ -52,7 +49,6 @@ export class TaskForm implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // If form hasn't been initialized yet, make sure it exists
     if (!this.taskForm) this.initForm();
     if (changes['task'] && changes['task'].currentValue) {
       this.task = changes['task'].currentValue;
@@ -158,7 +154,6 @@ export class TaskForm implements OnInit, OnChanges {
       echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
     }));
 
-    // convert root task echeance back to ISO for backend
     payload.echeance = payload.echeance ? new Date(payload.echeance).toISOString() : null;
 
     payload.etiquettes = (payload.etiquettes ?? []).filter((tag: any) => tag && typeof tag === 'string');
@@ -178,11 +173,9 @@ export class TaskForm implements OnInit, OnChanges {
   private postTask(task: Task): void {
     this.taskService.postTask(task).subscribe((data) => {
       if (this.task) {
-        // Modal mode: emit close to let parent handle refreshing
         this.close.emit();
         return;
       }
-      // Route mode: navigate to created task
       this.router.navigate(['/tasks/', data._id]);
     });
   }
