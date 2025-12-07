@@ -5,7 +5,7 @@ import { PRIORITY, STATUS, Task } from '@task-app/models/model.include.model';
 import { Comment, AuthorSelect } from '@task-app/components/component.include';
 import { TasksService } from '@task-app/core/service/tasks.service';
 import { arrayValidator } from '@task-app/core/validator/array.validator';
-import { SelectSimpleField, TextField } from '@libs/ui/component.lib.include';
+import { SelectSimpleField } from '@libs/ui/component.lib.include';
 import { Substack } from "@task-app/components/substack/substack";
 import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -13,11 +13,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, TextField, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes],
+  imports: [ReactiveFormsModule, FormsModule, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes],
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit {
-  @Input() task: Task | undefined;
+  @Input() task: Task | null | undefined;
   @Output() close = new EventEmitter<void>();
 
   private activatedRoute = inject(ActivatedRoute);

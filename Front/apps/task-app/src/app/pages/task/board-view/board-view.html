@@ -22,7 +22,8 @@
               <app-status-column
                 [status]="status"
                 [tasks]="getTasksByStatus(status)"
-                (editTask)="openEditModal($event)">
+                (editTask)="openEditModal($event)"
+                (removeTask)="removeTask($event)">
                 </app-status-column>
             </div>
           }
@@ -31,7 +32,7 @@
     }
   </div>
 
-  @if (showModal && selectedTask) {
+  @if (showModal) {
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" (click)="closeModal()">
       <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-11/12 h-5/6 flex flex-col" (click)="$event.stopPropagation()">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">

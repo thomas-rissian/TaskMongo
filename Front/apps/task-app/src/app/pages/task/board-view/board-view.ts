@@ -41,6 +41,10 @@ export class BoardViewComponent implements OnInit {
     this.selectedTask = task || null;
     this.showModal = true;
   }
+  removeTask(task: Task) {
+    this.tasksService.deleteTask(task._id!).subscribe(() => {
+    });
+  }
   closeModal() {
     this.showModal = false;
     this.selectedTask = null;

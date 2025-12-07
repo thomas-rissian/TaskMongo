@@ -9,12 +9,20 @@
     <a [routerLink]="['/tasks', task._id]" class="block hover:text-blue-600" (click)="$event.stopPropagation()">
       <h3 class="font-semibold text-sm text-gray-900 line-clamp-2">{{ task.titre }}</h3>
     </a>
+    
     <button
       class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
       (click)="onEditClick($event)"
       aria-label="Edit task"
     >
       Edit
+    </button>
+    <button
+      class="text-xs px-2 py-0.5 rounded hover:bg-gray-100"
+      (click)="onRemoveClick()"
+      aria-label="Remove task"
+    >
+      Supprimer
     </button>
   </div>
 

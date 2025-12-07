@@ -13,7 +13,8 @@ export class StatusColumnComponent {
   @Input() tasks: Task[] = [];
   @Input() status!: string;
   @Output() editTask = new EventEmitter<Task>();
-
+  @Output() removeTask = new EventEmitter<Task>();
+  
   getColumnColor(): string {
     const colorMap: { [key: string]: string } = {
       'Backlog': 'bg-gray-100',

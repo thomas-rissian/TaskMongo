@@ -1,14 +1,172 @@
-<div>
-    <app-loader></app-loader>
-    <ul>
-        @if (task) {
-            <li>titre : {{ task.titre }}</li>
-            <li>Auteur : {{ task.auteur.nom }}</li> 
-            <li>DateCreation : {{ task.dateCreation }}</li> 
-            <li>commentaires : {{ task.commentaires }}</li>
-            <li>Historique : {{ task.historiqueModifications }}</li> 
-            <li>sousTaches : {{ task.sousTaches }}</li> 
-        }
-        
-    </ul>
+<div class="min-h-screen bg-gray-50">
+  @if (!task) {
+    <div class="flex items-center justify-center h-screen">
+      <app-loader></app-loader>
+    </div>
+  } @else {
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200">
+      <div class="max-w-4xl mx-auto px-6 py-6">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h1 class="text-3xl font-bold text-gray-900">{{ task.titre }}</h1>
+              <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
+                {{ task.statut }}
+              </span>
+              @if (task.priorite) {
+                <span [class]="'px-3 py-1 text-xs font-semibold rounded-full ' + getPriorityClass(task.priorite)">
+                  {{ task.priorite }}
+                </span>
+              }
+            </div>
+            <p class="text-gray-500 text-sm">{{ task.dateCreation | date:'medium' }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button 
+              (click)="onEdit()" 
+              class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Éditer
+            </button>
+            <button 
+              (click)="onDelete()" 
+              class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-200 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Supprimer
+            </button>
+            <button 
+              (click)="onBack()" 
+              class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition-all duration-200 cursor-pointer">
+              ← Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-6 py-8">
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Left Column - Main Content -->
+        <div class="col-span-2 space-y-6">
+          <!-- Description -->
+          <div class="bg-white rounded-lg border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+            <div class="h-0.5 bg-gray-300 mb-4"></div>
+            <p class="text-gray-700 whitespace-pre-wrap">
+              {{ task.description || 'Aucune description' }}
+            </p>
+          </div>
+
+          <!-- Étiquettes -->
+          @if (task.etiquettes && task.etiquettes.length > 0) {
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">Étiquettes</h2>
+              <div class="h-0.5 bg-gray-300 mb-4"></div>
+              <div class="flex flex-wrap gap-2">
+                @for (tag of task.etiquettes; track tag) {
+                  <span class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-3 py-1.5 rounded-full text-sm font-medium border border-indigo-300">
+                    <span class="text-indigo-600 font-bold">#</span>{{ tag }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Sous-tâches -->
+          @if (task.sousTaches && task.sousTaches.length > 0) {
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">Sous-tâches ({{ getCompletedSubtasks() }}/{{ task.sousTaches.length }})</h2>
+              <div class="h-0.5 bg-gray-300 mb-4"></div>
+              <div class="space-y-2">
+                @for (subtask of task.sousTaches; track subtask._id) {
+                  <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                    <input 
+                      type="checkbox" 
+                      [checked]="subtask.statut === 'Done'"
+                      disabled
+                      class="w-5 h-5 cursor-not-allowed">
+                    <div class="flex-1">
+                      <p class="font-medium text-gray-900">{{ subtask.titre }}</p>
+                      <p class="text-xs text-gray-500">
+                        {{ subtask.statut }}
+                        @if (subtask.echeance) {
+                          <span>• {{ subtask.echeance | date:'shortDate' }}</span>
+                        }
+                      </p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Commentaires -->
+          @if (task.commentaires && task.commentaires.length > 0) {
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-2">Commentaires ({{ task.commentaires.length }})</h2>
+              <div class="h-0.5 bg-gray-300 mb-4"></div>
+              <div class="space-y-4">
+                @for (comment of task.commentaires; track comment._id) {
+                  <div class="border-l-4 border-gray-300 pl-4 py-2">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="font-semibold text-gray-900">
+                          {{ comment.auteur.prenom }} {{ comment.auteur.nom }}
+                        </p>
+                        <p class="text-xs text-gray-500">{{ comment.date | date:'medium' }}</p>
+                      </div>
+                    </div>
+                    <p class="text-gray-700 mt-2 whitespace-pre-wrap">{{ comment.contenu }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Right Column - Metadata -->
+        <div class="col-span-1">
+          <!-- Auteur Card -->
+          <div class="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Auteur</h3>
+              <div class="h-0.5 bg-gray-300 mb-3"></div>
+              <div>
+                <p class="font-semibold text-gray-900">{{ task.auteur.prenom }} {{ task.auteur.nom }}</p>
+                <p class="text-xs text-gray-600">{{ task.auteur.email }}</p>
+              </div>
+            </div>
+
+            <!-- Status & Priority -->
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Statut</h3>
+              <div class="h-0.5 bg-gray-300 mb-3"></div>
+              <p class="font-medium text-gray-900">{{ task.statut }}</p>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Priorité</h3>
+              <div class="h-0.5 bg-gray-300 mb-3"></div>
+              <p class="font-medium text-gray-900">{{ task.priorite || 'Aucune' }}</p>
+            </div>
+
+            <!-- Dates -->
+            @if (task.echeance) {
+              <div>
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Échéance</h3>
+                <div class="h-0.5 bg-gray-300 mb-3"></div>
+                <p class="font-medium text-gray-900">{{ task.echeance | date:'medium' }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </div>

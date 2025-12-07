@@ -16,7 +16,7 @@
     } @else {
       <div class="flex flex-col gap-2">
         @for (task of tasks; track task._id) {
-          <app-task-card [task]="task" (edit)="editTask.emit($event)"></app-task-card>
+          <app-task-card [task]="task" (edit)="editTask.emit($event)" (remove)="removeTask.emit($event)"></app-task-card>
         }
       </div>
     }

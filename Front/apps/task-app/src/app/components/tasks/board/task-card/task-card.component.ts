@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Task } from '@task-app/models/task.model';
 import { SubtaskListComponent } from '../subtask-list/subtask-list.component';
+import { TasksService } from '@task-app/core/service/tasks.service';
 
 @Component({
   selector: 'app-task-card',
@@ -13,8 +14,10 @@ import { SubtaskListComponent } from '../subtask-list/subtask-list.component';
 export class TaskCardComponent {
   @Input() task!: Task;
   @Output() edit = new EventEmitter<Task>();
-  showSubtasks = false;
+  @Output() remove = new EventEmitter<Task>();
 
+  showSubtasks = false;
+  constructor(private taskService: TasksService) {}
   toggleSubtasks(): void {
     this.showSubtasks = !this.showSubtasks;
   }
@@ -23,7 +26,11 @@ export class TaskCardComponent {
     ev.stopPropagation();
     this.edit.emit(this.task);
   }
-
+  onRemoveClick() {
+    this.taskService.deleteTask(this.task._id!).subscribe(() => {
+      this.remove.emit(this.task);
+    });
+  }
   truncateText(text: string | undefined, lines: number): string {
     if (!text) return '';
     const lineArray = text.split('\n').slice(0, lines);

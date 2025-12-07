@@ -57,7 +57,6 @@ exports.getOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const payload = req.body;
-  console.log("Update payload:", req.body);
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.id,
       payload,
