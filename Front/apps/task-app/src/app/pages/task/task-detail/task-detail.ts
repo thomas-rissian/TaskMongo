@@ -54,7 +54,7 @@ export class TaskDetail implements OnInit {
   }
 
   onEdit() {
-    this.router.navigate([`/tasks/edit/${this.id}`]);
+    this.router.navigate([`/tasks/${this.id}/edit`]);
   }
 
   onDelete() {
