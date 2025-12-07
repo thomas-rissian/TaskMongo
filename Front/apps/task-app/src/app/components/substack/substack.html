@@ -1,0 +1,72 @@
+<div class="substack">
+  <div class="add-subtask mb-4 flex gap-2 items-center">
+    <app-text-field
+      title="Nouvelle sous-tâche"
+      type="text"
+      placeholder="Titre..."
+      [(ngModel)]="newTitle">
+    </app-text-field>
+
+    <app-select-simple-field
+      title="Statut"
+      [listField]="statusList"
+      [(ngModel)]="newStatus">
+    </app-select-simple-field>
+
+    <input
+      type="date"
+      class="border rounded px-2 py-1"
+      [(ngModel)]="newEcheance" />
+
+    <button type="button" (click)="addSubtask()" class="btn">Add</button>
+  </div>
+
+  <div class="subtasks-list space-y-2" *ngIf="getControls().length > 0">
+    <ng-container *ngFor="let ctrl of getControls(); let i = index; trackBy: trackByIndex">
+      <app-editable-container
+        (save)="saveEdit(i)"
+        (cancel)="cancelEdit(i)"
+        (delete)="removeSubtask(i)"
+        (edit)="prepareEdit(i)"
+        >
+
+        <ng-template #viewMode>
+          <div class="flex justify-between items-center p-2 border rounded">
+            <div>
+              <div class="font-medium">{{ ctrl.get('titre')?.value }}</div>
+              <div class="text-xs text-gray-600">
+                {{ ctrl.get('statut')?.value }} <span class="mx-2">•</span>
+                <span *ngIf="ctrl.get('echeance')?.value">{{ ctrl.get('echeance')?.value | date:'shortDate' }}</span>
+              </div>
+            </div>
+            <div class="text-xs text-gray-500"></div>
+          </div>
+        </ng-template>
+
+        <ng-template #editMode>
+          <div class="p-2 border rounded space-y-2">
+            <!-- bind directly to the FormGroup controls so the value is always in sync -->
+            <app-text-field
+              title="Titre"
+              type="text"
+              placeholder="Titre..."
+              [formControl]="getControlField(ctrl, 'titre')">
+            </app-text-field>
+
+            <app-select-simple-field
+              title="Statut"
+              [listField]="statusList"
+              [formControl]="getControlField(ctrl, 'statut')">
+            </app-select-simple-field>
+
+            <div class="flex gap-2 items-center">
+              <input type="date"
+                [formControl]="getControlField(ctrl, 'echeance')" />
+            </div>
+          </div>
+        </ng-template>
+
+      </app-editable-container>
+    </ng-container>
+  </div>
+</div>

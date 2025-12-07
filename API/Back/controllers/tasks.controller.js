@@ -37,8 +37,9 @@ exports.getAll = async (req, res) => {
 // ------------------ READ ONE ------------------
 exports.getOne = async (req, res) => {
   try {
+    console.log(req.params.id);
     const task = await Task.findById(req.params.id);
-
+    console.log(task);
     if (!task) {
       return res.status(404).json({ error: 'Tâche non trouvée' });
     }
@@ -56,13 +57,13 @@ exports.getOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const payload = req.body;
-
+  console.log("Update payload:", req.body);
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.id,
       payload,
       { new: true, runValidators: true }
     );
-
+    
     if (!updatedTask) {
       return res.status(404).json({ error: 'Tâche non trouvée' });
     }

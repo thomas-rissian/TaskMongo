@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-1 p-2 bg-gray-50 rounded border border-gray-200">
+  @for (subtask of subtasks; track subtask._id) {
+    <div class="flex items-center gap-2">
+      <input
+        type="checkbox"
+        class="w-4 h-4 accent-blue-500 cursor-not-allowed"
+        [checked]="subtask.statut === 'Done'"
+        disabled
+      />
+      <span 
+        class="text-xs flex-1 break-word"
+        [class]="subtask.statut === 'Done' ? 'line-through text-gray-400' : 'text-gray-700'"
+      >
+        {{ subtask.titre }}
+      </span>
+    </div>
+  }
+</div>

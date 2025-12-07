@@ -1,63 +1,85 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TextAreaField } from "@libs/ui/inputs/textAreaField/textAreaField";
 import { EditableContainer } from '@libs/ui/inputs/EditableContainer/EditableContainer';
 
 @Component({
   selector: 'app-comment',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, TextAreaField, EditableContainer],
-
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, TextAreaField, EditableContainer],
   templateUrl: './comment.html'
 })
 export class Comment {
-  @Input({required: true}) commentForm!: FormGroup;
+  @Input({ required: true }) commentForm!: FormArray; 
   error: string = "";
   newCommentText: string = "";
 
-  commentEditList : string[] = [];
+  commentEditList: string[] = [];
 
-  getCommentText(): string[] {
-    return this.commentForm.value;
+  constructor(private fb: FormBuilder) {}
+
+  getControls(): FormGroup[] {
+    return (this.commentForm as FormArray).controls as FormGroup[];
   }
 
   getCommentByIndex(index: number): string {
-    return this.getCommentText()[index];
+    const grp = this.getControls()[index];
+    return grp ? (grp.get('contenu')?.value ?? '') : '';
   }
 
   addComment() {
-    if (this.newCommentText.trim() === "") {
+    const text = this.newCommentText?.trim() ?? '';
+    if (!text) {
       this.error = "Comment cannot be empty.";
       return;
     }
     this.error = "";
-    this.getCommentText().push(this.newCommentText);
+
+    const group = this.fb.group({
+      _id: [null],
+      auteur: this.fb.group({
+        nom: ['test'],
+        prenom: ['test'],
+        email: ['test@test.fr', [Validators.email]]
+      }),
+      date: [new Date().toISOString()],
+      contenu: [text, Validators.required]
+    });
+
+    (this.commentForm as FormArray).push(group);
     this.newCommentText = "";
   }
 
   updateComment(index: number) {
-    const newText = this.commentEditList[index] || "";
-    if (newText.trim() === "") {
+    const newText = (this.commentEditList[index] || "").trim();
+    if (!newText) {
       this.error = "Comment cannot be empty.";
       return;
     }
+    const grp = this.getControls()[index];
+    grp.get('contenu')?.setValue(newText);
+    grp.get('date')?.setValue(new Date().toISOString());
     this.resetComment(index);
     this.error = "";
-    this.getCommentText()[index] = newText;
   }
 
   updateNewCommentText(index: number, newText: string) {
     this.commentEditList[index] = newText;
   }
+
   getNewCommentText(index: number): string {
-    return this.commentEditList[index] || this.getCommentByIndex(index);
+    const edit = this.commentEditList[index];
+    if (typeof edit !== 'undefined' && edit !== '') return edit;
+    return this.getCommentByIndex(index);
   }
 
   resetComment(index: number) {
     this.commentEditList[index] = "";
   }
-  removeComment(index: number) {
-    this.getCommentText().splice(index, 1);
-  }
 
+  removeComment(index: number) {
+    (this.commentForm as FormArray).removeAt(index);
+    this.commentEditList.splice(index, 1);
+  }
 }

@@ -5,7 +5,7 @@ const HistoriqueSchema = require('./history.schema');
 
 const SousTacheSchema = new Schema({
     titre: { type: String, required: true, trim: true },
-    statut: { type: String, enum: ['à faire', 'en cours', 'terminée', 'annulée'], default: 'à faire' },
+    statut: { type: String, enum: ['Backlog', 'Ready', 'In progress', 'In review', 'Done'], default: 'Backlog' },
     echeance: { type: Date }
 }, { _id: true });
 
@@ -20,8 +20,8 @@ const TaskSchema = new Schema({
     description: { type: String },
     dateCreation: { type: Date, default: Date.now },
     echeance: { type: Date },
-    statut: { type: String, enum: ['à faire', 'en cours', 'terminée', 'annulée'], default: 'à faire' },
-    priorite: { type: String, enum: ['basse', 'moyenne', 'haute', 'critique'], default: 'moyenne' },
+    statut: { type: String, enum: ['Backlog', 'Ready', 'In progress', 'In review', 'Done'], default: 'Backlog' },
+    priorite: { type: String, enum: ['Low', 'Medium', 'High', 'Critical'], default: 'Medium' },
     auteur: { type: AuteurSchema, required: true },
     categorie: { type: String },
     etiquettes: { type: [String], default: []},

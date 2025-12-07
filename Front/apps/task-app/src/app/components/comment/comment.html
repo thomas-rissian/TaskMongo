@@ -4,9 +4,10 @@
         placeholder="Commentaire..."
         [value]="newCommentText"
         (valueChange)="newCommentText = $event"/>
-  <button (click)="addComment()"> Add Comment </button>
+  <button type="button" (click)="addComment()"> Add Comment </button>
 
-  @for (item of getCommentText(); track $index) {
+  <!-- iterate over FormArray controls -->
+  @for (ctrl of getControls(); track $index) {
     <app-editable-container
       (save)="updateComment($index)"
       (cancel)="resetComment($index)"
@@ -14,7 +15,13 @@
       >
 
       <ng-template #viewMode>
-        {{getCommentByIndex($index)}}
+        <div class="comment-view">
+          <small>
+            {{ (ctrl.get('auteur.nom')?.value || '') }} {{ (ctrl.get('auteur.prenom')?.value || '') }}
+            — {{ ctrl.get('date')?.value | date:'short' }}
+          </small>
+          <div>{{ ctrl.get('contenu')?.value }}</div>
+        </div>
       </ng-template>
 
       <ng-template #editMode>
@@ -22,10 +29,9 @@
           placeholder="Commentaire..."
           (valueChange)="updateNewCommentText($index, $event)"
           [value]="getNewCommentText($index)"
-          
           />
       </ng-template>
 
     </app-editable-container>
-    }
+  }
 </div>

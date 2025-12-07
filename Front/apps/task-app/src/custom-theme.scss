@@ -1,0 +1,37 @@
+@use '@angular/material/theming' as mat;
+
+/*
+  Custom Angular Material theme for the app.
+  - Uses Material Sass module API (Angular Material v15+)
+  - You can change palette seeds and tone values below
+*/
+
+// Primary / Accent / Warn palettes
+$primary-palette: mat.define-palette(mat.$indigo-palette, 600);
+$accent-palette: mat.define-palette(mat.$pink-palette, 200);
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+// Typography configuration (optional)
+$typography-config: mat.define-typography-config();
+
+// Define the theme (light theme as default)
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette
+  ),
+  typography: $typography-config
+));
+
+// Include core styles and all component themes
+@include mat.core();
+@include mat.all-component-themes($custom-theme);
+
+// Optionally export some utility classes or include specific component theme needs
+// Example: mat.button-theme($custom-theme);
+
+/* Ensure Material components respect the app font */
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

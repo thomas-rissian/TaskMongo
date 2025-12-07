@@ -1,19 +1,22 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { Author } from "./author.model";
-import { priorityType } from "./priority.model";
-import { statusType } from "./status.model";
-
+import { Author } from './author.model';
+import { Subtask } from './subtask.model';
+import { Commentaire } from './comment.model';
+import { statusType } from './status.model';
+import { priorityType } from './priority.model';
+import { Historique } from './history.model';
 
 export interface Task {
-    _id?: string; 
-    titre: string;
-    description: string;
-    status: statusType;
-    priorite: priorityType;
-    auteur: Author;
-    dateCreation: string;
-    sousTaches?: Task[];
-    commentaires?: string[];
-    historiqueModifications?: string[];
-    etiquettes?: string[];
+  _id?: string;
+  titre: string;
+  description?: string;
+  dateCreation?: string;
+  echeance?: string;
+  statut?: statusType;
+  priorite?: priorityType;
+  auteur: Author;
+  categorie?: string;
+  etiquettes?: string[];
+  sousTaches?: Subtask[];
+  commentaires?: Commentaire[];
+  historiqueModifications?: Historique[];
 }

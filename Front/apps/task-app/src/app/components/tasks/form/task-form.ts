@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PRIORITY, STATUS, Task } from '@task-app/models/model.include.model';
@@ -8,6 +8,7 @@ import { arrayValidator } from '@task-app/core/validator/array.validator';
 import { SelectSimpleField, TextField } from '@libs/ui/component.lib.include';
 import { Substack } from "@task-app/components/substack/substack";
 import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-task-form',
@@ -16,7 +17,6 @@ import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit {
-  
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private taskService = inject(TasksService);
@@ -30,13 +30,28 @@ export class TaskForm implements OnInit {
   taskId: string | undefined;
 
   ngOnInit(): void {
-    this.taskId = this.activatedRoute.snapshot.params['id'] || undefined; 
     this.initForm();
+    // If opened via MatDialog, dialogData.task will be provided
+    if (this.dialogData?.task) {
+      this.task = this.dialogData.task;
+      this.taskId = this.task._id;
+      const { commentaires, sousTaches, etiquettes, historiqueModifications, ...simple } = this.task as any;
+      this.taskForm.patchValue(simple);
+      this.taskForm.setControl('commentaires', this.fb.array((commentaires || []).map((c: any) => this.createCommentaireGroup(c))));
+      this.taskForm.setControl('sousTaches', this.fb.array((sousTaches || []).map((s: any) => this.createSousTacheGroup(s))));
+      this.taskForm.setControl('etiquettes', this.fb.array((etiquettes || []).map((tag: string) => this.fb.control(tag))));
+      return;
+    }
+
+    this.taskId = this.activatedRoute.snapshot.params['id'] || undefined; 
     if (this.taskId) {
       this.loadTask();
     }
   }
-
+constructor(
+    @Optional() @Inject(MatDialogRef) private dialogRef?: MatDialogRef<TaskForm>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: { task?: Task }
+  ) {}
   get titreControl(): FormControl { return this.taskForm.get('titre') as FormControl; }
   get descriptionControl(): FormControl { return this.taskForm.get('description') as FormControl; }
   get auteurGroup(): FormGroup { return this.taskForm.get('auteur') as FormGroup; }
@@ -135,14 +150,30 @@ export class TaskForm implements OnInit {
 
   private postTask(task: Task): void {
     this.taskService.postTask(task).subscribe((data) => {
-      this.router.navigate(['/tasks/', data._id]);
+      if (this.dialogRef) {
+        this.dialogRef.close(data);
+      } else {
+        this.router.navigate(['/tasks/', data._id]);
+      }
     });
   }
 
   private putTask(task: Task): void {
     task._id = this.taskId;
     this.taskService.putTask(task).subscribe((data) => {
-      this.router.navigate(['/tasks/', data._id]);
+      if (this.dialogRef) {
+        this.dialogRef.close(data);
+      } else {
+        this.router.navigate(['/tasks/', data._id]);
+      }
     });
+  }
+
+  cancel(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close(null);
+    } else {
+      this.router.navigate(['/tasks']);
+    }
   }
 }

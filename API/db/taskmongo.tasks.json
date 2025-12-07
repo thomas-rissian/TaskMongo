@@ -1,82 +1,195 @@
-[{
-  "_id": {
-    "$oid": "691f6725f64127aac071085a"
+[
+  {
+    "_id": { "$oid": "691f6725f64127aac071085a" },
+    "titre": "Ma première tâche",
+    "description": "Ceci est un test",
+    "statut": "Backlog",
+    "priorite": "Medium",
+    "auteur": {
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com"
+    },
+    "categorie": "Développement",
+    "etiquettes": ["frontend", "urgent"],
+    "dateCreation": { "$date": "2025-11-20T19:08:21.465Z" },
+    "echeance": { "$date": "2025-12-15T23:59:59.000Z" },
+    "sousTaches": [
+      {
+        "_id": { "$oid": "691f6725f64127aac071085b" },
+        "titre": "Analyser les requêtes",
+        "statut": "In progress",
+        "echeance": { "$date": "2025-12-10T23:59:59.000Z" }
+      },
+      {
+        "_id": { "$oid": "691f6725f64127aac071085c" },
+        "titre": "Créer les composants",
+        "statut": "Backlog",
+        "echeance": { "$date": "2025-12-12T23:59:59.000Z" }
+      }
+    ],
+    "commentaires": [
+      {
+        "_id": { "$oid": "691f6725f64127aac071085e" },
+        "auteur": {
+          "nom": "Martin",
+          "prenom": "Sophie",
+          "email": "sophie.martin@example.com"
+        },
+        "date": { "$date": "2025-11-21T10:30:00.000Z" },
+        "contenu": "J'ai commencé l'analyse, tout semble bon pour l'instant."
+      },
+      {
+        "_id": { "$oid": "691f6725f64127aac071085f" },
+        "auteur": {
+          "nom": "Dupont",
+          "prenom": "Jean",
+          "email": "jean.dupont@example.com"
+        },
+        "date": { "$date": "2025-11-21T14:15:00.000Z" },
+        "contenu": "Parfait ! Avance comme prévu."
+      }
+    ],
+    "historiqueModifications": [
+      {
+        "_id": { "$oid": "691f6725f64127aac0710866" },
+        "champModifie": "statut",
+        "ancienneValeur": "In progress",
+        "nouvelleValeur": "Backlog",
+        "date": { "$date": "2025-11-21T09:00:00.000Z" }
+      }
+    ],
+    "createdAt": { "$date": "2025-11-20T19:08:21.475Z" },
+    "updatedAt": { "$date": "2025-11-21T14:15:00.000Z" },
+    "__v": 0
   },
-  "titre": "Ma première tâche",
-  "description": "Ceci est un test",
-  "statut": "Ready",
-  "priorite": "Medium",
-  "auteur": {
-    "nom": "Dupont",
-    "prenom": "Jean",
-    "email": "jean.dupont@example.com"
+
+  {
+    "_id": { "$oid": "691f67a4f64127aac071085d" },
+    "titre": "Ma deuxième tâche",
+    "description": "Ceci est le test 2",
+    "statut": "In progress",
+    "priorite": "High",
+    "auteur": {
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com"
+    },
+    "categorie": "Backend",
+    "etiquettes": ["API", "mongodb"],
+    "dateCreation": { "$date": "2025-11-20T19:10:28.637Z" },
+    "echeance": { "$date": "2025-12-08T23:59:59.000Z" },
+    "sousTaches": [
+      {
+        "_id": { "$oid": "691f67a4f64127aac071085e" },
+        "titre": "Configurer la base de données",
+        "statut": "Done",
+        "echeance": { "$date": "2025-11-22T23:59:59.000Z" }
+      },
+      {
+        "_id": { "$oid": "691f67a4f64127aac071085f" },
+        "titre": "Écrire les endpoints",
+        "statut": "In progress",
+        "echeance": { "$date": "2025-12-05T23:59:59.000Z" }
+      },
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710860" },
+        "titre": "Tests unitaires",
+        "statut": "Backlog",
+        "echeance": { "$date": "2025-12-08T23:59:59.000Z" }
+      }
+    ],
+    "commentaires": [
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710861" },
+        "auteur": {
+          "nom": "Bernard",
+          "prenom": "Pierre",
+          "email": "pierre.bernard@example.com"
+        },
+        "date": { "$date": "2025-11-22T08:45:00.000Z" },
+        "contenu": "La base de données est prête pour les tests."
+      },
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710862" },
+        "auteur": {
+          "nom": "Dupont",
+          "prenom": "Jean",
+          "email": "jean.dupont@example.com"
+        },
+        "date": { "$date": "2025-11-22T11:20:00.000Z" },
+        "contenu": "Merci Pierre ! Je commence les endpoints dès maintenant."
+      },
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710863" },
+        "auteur": {
+          "nom": "Bernard",
+          "prenom": "Pierre",
+          "email": "pierre.bernard@example.com"
+        },
+        "date": { "$date": "2025-11-22T16:30:00.000Z" },
+        "contenu": "N'oublie pas les validations côté serveur !"
+      }
+    ],
+    "historiqueModifications": [
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710864" },
+        "champModifie": "statut",
+        "ancienneValeur": "Backlog",
+        "nouvelleValeur": "In progress",
+        "date": { "$date": "2025-11-21T08:00:00.000Z" }
+      },
+      {
+        "_id": { "$oid": "691f67a4f64127aac0710865" },
+        "champModifie": "priorite",
+        "ancienneValeur": "Medium",
+        "nouvelleValeur": "High",
+        "date": { "$date": "2025-11-21T15:45:00.000Z" }
+      }
+    ],
+    "createdAt": { "$date": "2025-11-20T19:10:28.639Z" },
+    "updatedAt": { "$date": "2025-11-22T16:30:00.000Z" },
+    "__v": 0
   },
-  "dateCreation": {
-    "$date": "2025-11-20T19:08:21.465Z"
-  },
-  "sousTaches": [],
-  "commentaires": [],
-  "historiqueModifications": [],
-  "createdAt": {
-    "$date": "2025-11-20T19:08:21.475Z"
-  },
-  "updatedAt": {
-    "$date": "2025-11-20T19:08:21.475Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "691f67a4f64127aac071085d"
-  },
-  "titre": "Ma deuxième tâche",
-  "description": "Ceci est le test 2",
-  "statut": "In progress",
-  "priorite": "High",
-  "auteur": {
-    "nom": "Dupont",
-    "prenom": "Jean",
-    "email": "jean.dupont@example.com"
-  },
-  "dateCreation": {
-    "$date": "2025-11-20T19:10:28.637Z"
-  },
-  "sousTaches": [],
-  "commentaires": [],
-  "historiqueModifications": [],
-  "createdAt": {
-    "$date": "2025-11-20T19:10:28.639Z"
-  },
-  "updatedAt": {
-    "$date": "2025-11-20T19:10:28.639Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "691f6a70177115e39d41113a"
-  },
-  "titre": "Ma troisième tâche",
-  "description": "Ceci est un test",
-  "statut": "Ready",
-  "priorite": "Medium",
-  "auteur": {
-    "nom": "Dupont",
-    "prenom": "Jean",
-    "email": "jean.dupont@example.com"
-  },
-  "categorie": "Test",
-  "dateCreation": {
-    "$date": "2025-11-20T19:22:24.298Z"
-  },
-  "sousTaches": [],
-  "commentaires": [],
-  "historiqueModifications": [],
-  "createdAt": {
-    "$date": "2025-11-20T19:22:24.309Z"
-  },
-  "updatedAt": {
-    "$date": "2025-11-20T19:22:24.309Z"
-  },
-  "__v": 0
-}]
+
+  {
+    "_id": { "$oid": "691f6a70177115e39d41113a" },
+    "titre": "Ma troisième tâche",
+    "description": "Ceci est un test",
+    "statut": "Backlog",
+    "priorite": "Medium",
+    "auteur": {
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com"
+    },
+    "categorie": "Test",
+    "etiquettes": ["QA", "regression"],
+    "dateCreation": { "$date": "2025-11-20T19:22:24.298Z" },
+    "echeance": { "$date": "2025-12-20T23:59:59.000Z" },
+    "sousTaches": [
+      {
+        "_id": { "$oid": "691f6a70177115e39d41113b" },
+        "titre": "Tests de régression",
+        "statut": "Backlog",
+        "echeance": { "$date": "2025-12-15T23:59:59.000Z" }
+      }
+    ],
+    "commentaires": [
+      {
+        "_id": { "$oid": "691f6a70177115e39d41113c" },
+        "auteur": {
+          "nom": "Garcia",
+          "prenom": "Maria",
+          "email": "maria.garcia@example.com"
+        },
+        "date": { "$date": "2025-11-23T09:15:00.000Z" },
+        "contenu": "En attente de la version stable pour commencer les tests."
+      }
+    ],
+    "historiqueModifications": [],
+    "createdAt": { "$date": "2025-11-20T19:22:24.309Z" },
+    "updatedAt": { "$date": "2025-11-23T09:15:00.000Z" },
+    "__v": 0
+  }
+]

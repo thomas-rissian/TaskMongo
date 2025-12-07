@@ -1,0 +1,41 @@
+<div class="etiquettes">
+  <form class="add-tag-form" (ngSubmit)="addEtiquette()">
+    <app-text-field
+      title="Étiquette"
+      type="text"
+      placeholder="Ajouter une étiquette..."
+      [formControl]="newEtiquetteControl">
+    </app-text-field>
+
+    <button
+      class="btn-add"
+      type="submit"
+      [disabled]="!newEtiquette || !newEtiquette.trim()"
+      aria-label="Ajouter">
+      Ajouter
+    </button>
+  </form>
+
+  @if (getEtiquettesList() && getEtiquettesList().length > 0) {
+    <div class="tags-list">
+      @for (tag of getEtiquettesList(); track tag) {
+        <span class="tag" role="listitem">
+          {{ tag }}
+          <button
+            class="remove-tag"
+            type="button"
+            aria-label="Supprimer"
+            (click)="removeEtiquette(getIndex(tag))">
+            ×
+          </button>
+        </span>
+      }
+    </div>
+  }
+
+  @if (!getEtiquettesList() || getEtiquettesList().length === 0) {
+    <p class="empty-msg">
+      Aucune étiquette ajoutée.
+    </p>
+  }
+</div>
