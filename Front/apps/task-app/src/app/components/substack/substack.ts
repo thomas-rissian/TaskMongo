@@ -3,13 +3,13 @@ import { FormArray, FormBuilder, FormGroup, FormControl, Validators, ReactiveFor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectSimpleField } from '@libs/ui/inputs/selectSimpleFied/select-simple-field';
-import { EditableContainer } from '@libs/ui/inputs/EditableContainer/EditableContainer';
+import { TaskEditableContainer } from '@libs/ui/inputs/TaskEditableContainer/TaskEditableContainer';
 import { TextField } from '@libs/ui/component.lib.include';
 
 @Component({
   selector: 'app-substack',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, TextField, SelectSimpleField, EditableContainer],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, TextField, SelectSimpleField, TaskEditableContainer],
   templateUrl: './substack.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

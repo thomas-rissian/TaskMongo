@@ -2,6 +2,11 @@
   <div class="shrink-0 px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
     <h1 class="text-2xl font-bold text-gray-900">Board</h1>
     <p class="text-sm text-gray-500 mt-1">{{ tasks.length }} tâche(s)</p>
+    <button
+      class="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+      (click)="openEditModal()">
+      Créer une tâche
+    </button>
   </div>
 
   <div class="flex-1 overflow-hidden">
@@ -25,4 +30,21 @@
       </div>
     }
   </div>
+
+  @if (showModal && selectedTask) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" (click)="closeModal()">
+      <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-11/12 h-5/6 flex flex-col" (click)="$event.stopPropagation()">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
+          <h2 class="text-xl font-bold text-gray-900">Éditer la tâche</h2>
+          <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+            ✕
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6">
+          <app-task-form [task]="selectedTask" (close)="closeModal()"></app-task-form>
+        </div>
+      </div>
+    </div>
+  }
 </div>

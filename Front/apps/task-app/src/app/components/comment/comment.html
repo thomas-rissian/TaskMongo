@@ -1,37 +1,48 @@
-<div>
-  <app-text-area-field
-        title="Commentaire"
-        placeholder="Commentaire..."
-        [value]="newCommentText"
-        (valueChange)="newCommentText = $event"/>
-  <button type="button" (click)="addComment()"> Add Comment </button>
+<div class="space-y-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
+    <textarea
+      class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white text-sm leading-relaxed min-h-[100px] resize-vertical transition-all duration-200 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+      placeholder="Commentaire..."
+      [(ngModel)]="newCommentText">
+    </textarea>
+  </div>
+  
+  <button 
+    type="button" 
+    (click)="addComment()" 
+    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer w-full"> 
+    + Ajouter Commentaire
+  </button>
 
   <!-- iterate over FormArray controls -->
   @for (ctrl of getControls(); track $index) {
-    <app-editable-container
+    <app-task-editable-container
+      [title]="(ctrl.get('auteur.nom')?.value || '') + ' ' + (ctrl.get('auteur.prenom')?.value || '')"
       (save)="updateComment($index)"
       (cancel)="resetComment($index)"
       (delete)="removeComment($index)"
-      >
+      [viewTemplate]="viewTemplate"
+      [editTemplate]="editTemplate">
+    </app-task-editable-container>
 
-      <ng-template #viewMode>
-        <div class="comment-view">
-          <small>
-            {{ (ctrl.get('auteur.nom')?.value || '') }} {{ (ctrl.get('auteur.prenom')?.value || '') }}
-            — {{ ctrl.get('date')?.value | date:'short' }}
-          </small>
-          <div>{{ ctrl.get('contenu')?.value }}</div>
-        </div>
-      </ng-template>
+    <ng-template #viewTemplate>
+      <div class="space-y-2">
+        <small class="text-gray-500">
+          {{ ctrl.get('date')?.value | date:'short' }}
+        </small>
+        <div class="text-gray-800">{{ ctrl.get('contenu')?.value }}</div>
+      </div>
+    </ng-template>
 
-      <ng-template #editMode>
-        <app-text-area-field
-          placeholder="Commentaire..."
-          (valueChange)="updateNewCommentText($index, $event)"
-          [value]="getNewCommentText($index)"
-          />
-      </ng-template>
-
-    </app-editable-container>
+    <ng-template #editTemplate>
+      <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
+      <textarea
+        class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white text-sm leading-relaxed min-h-[120px] resize-vertical transition-all duration-200 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        placeholder="Commentaire..."
+        [ngModel]="getNewCommentText($index)"
+        (ngModelChange)="updateNewCommentText($index, $event)">
+      </textarea>
+    </ng-template>
   }
 </div>

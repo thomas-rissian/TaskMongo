@@ -1,11 +1,18 @@
-<div class="substack">
-  <div class="add-subtask mb-4 flex gap-2 items-center">
-    <app-text-field
-      title="Nouvelle sous-tâche"
-      type="text"
-      placeholder="Titre..."
-      [(ngModel)]="newTitle">
-    </app-text-field>
+<div class="substack space-y-4">
+  <div>
+    <h3 class="text-sm font-semibold text-gray-800 pb-2">Sous-tâches</h3>
+    <div class="h-0.5 bg-gray-300"></div>
+  </div>
+
+  <div class="add-subtask grid grid-cols-4 gap-3 items-end">
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-800">Nouvelle sous-tâche</label>
+      <input
+        type="text"
+        class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        placeholder="Titre..."
+        [(ngModel)]="newTitle">
+    </div>
 
     <app-select-simple-field
       title="Statut"
@@ -13,45 +20,57 @@
       [(ngModel)]="newStatus">
     </app-select-simple-field>
 
-    <input
-      type="date"
-      class="border rounded px-2 py-1"
-      [(ngModel)]="newEcheance" />
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-800">Échéance</label>
+      <input
+        type="date"
+        class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        [(ngModel)]="newEcheance" />
+    </div>
 
-    <button type="button" (click)="addSubtask()" class="btn">Add</button>
+    <button 
+      type="button" 
+      (click)="addSubtask()" 
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer whitespace-nowrap self-end">
+      + Ajouter
+    </button>
   </div>
 
-  <div class="subtasks-list space-y-2" *ngIf="getControls().length > 0">
+  <div class="subtasks-list space-y-3" *ngIf="getControls().length > 0">
     <ng-container *ngFor="let ctrl of getControls(); let i = index; trackBy: trackByIndex">
-      <app-editable-container
-        (save)="saveEdit(i)"
-        (cancel)="cancelEdit(i)"
-        (delete)="removeSubtask(i)"
-        (edit)="prepareEdit(i)"
-        >
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <app-task-editable-container
+          [title]="ctrl.get('titre')?.value || 'Sous-tâche'"
+          (save)="saveEdit(i)"
+          (cancel)="cancelEdit(i)"
+          (delete)="removeSubtask(i)"
+          (edit)="prepareEdit(i)"
+          [viewTemplate]="viewTemplate"
+          [editTemplate]="editTemplate">
+        </app-task-editable-container>
 
-        <ng-template #viewMode>
-          <div class="flex justify-between items-center p-2 border rounded">
-            <div>
-              <div class="font-medium">{{ ctrl.get('titre')?.value }}</div>
-              <div class="text-xs text-gray-600">
-                {{ ctrl.get('statut')?.value }} <span class="mx-2">•</span>
-                <span *ngIf="ctrl.get('echeance')?.value">{{ ctrl.get('echeance')?.value | date:'shortDate' }}</span>
-              </div>
+        <ng-template #viewTemplate>
+          <div class="space-y-2">
+            <div class="text-sm text-gray-600">
+              <span>{{ ctrl.get('statut')?.value }}</span>
+              @if (ctrl.get('echeance')?.value) {
+                <span class="mx-2">•</span>
+                <span>{{ ctrl.get('echeance')?.value | date:'shortDate' }}</span>
+              }
             </div>
-            <div class="text-xs text-gray-500"></div>
           </div>
         </ng-template>
 
-        <ng-template #editMode>
-          <div class="p-2 border rounded space-y-2">
-            <!-- bind directly to the FormGroup controls so the value is always in sync -->
-            <app-text-field
-              title="Titre"
-              type="text"
-              placeholder="Titre..."
-              [formControl]="getControlField(ctrl, 'titre')">
-            </app-text-field>
+        <ng-template #editTemplate>
+          <div class="space-y-3">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-800">Titre</label>
+              <input
+                type="text"
+                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                placeholder="Titre..."
+                [formControl]="getControlField(ctrl, 'titre')">
+            </div>
 
             <app-select-simple-field
               title="Statut"
@@ -59,14 +78,16 @@
               [formControl]="getControlField(ctrl, 'statut')">
             </app-select-simple-field>
 
-            <div class="flex gap-2 items-center">
-              <input type="date"
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-800">Échéance</label>
+              <input 
+                type="date"
+                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 bg-white transition-all duration-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 [formControl]="getControlField(ctrl, 'echeance')" />
             </div>
           </div>
         </ng-template>
-
-      </app-editable-container>
+      </div>
     </ng-container>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, inject, Input, Output, EventEmitter, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PRIORITY, STATUS, Task } from '@task-app/models/model.include.model';
@@ -17,6 +17,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit {
+  @Input() task: Task | undefined;
+  @Output() close = new EventEmitter<void>();
+
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private taskService = inject(TasksService);
@@ -26,14 +29,12 @@ export class TaskForm implements OnInit {
   STATUS: string[] = STATUS;
 
   taskForm!: FormGroup;
-  task: Task | undefined;
   taskId: string | undefined;
 
   ngOnInit(): void {
     this.initForm();
-    // If opened via MatDialog, dialogData.task will be provided
-    if (this.dialogData?.task) {
-      this.task = this.dialogData.task;
+    // If task passed via @Input (modal mode)
+    if (this.task && this.task._id) {
       this.taskId = this.task._id;
       const { commentaires, sousTaches, etiquettes, historiqueModifications, ...simple } = this.task as any;
       this.taskForm.patchValue(simple);
@@ -43,6 +44,7 @@ export class TaskForm implements OnInit {
       return;
     }
 
+    // If opened via route
     this.taskId = this.activatedRoute.snapshot.params['id'] || undefined; 
     if (this.taskId) {
       this.loadTask();
@@ -150,9 +152,11 @@ constructor(
 
   private postTask(task: Task): void {
     this.taskService.postTask(task).subscribe((data) => {
-      if (this.dialogRef) {
-        this.dialogRef.close(data);
+      if (this.task && this.task._id) {
+        // Modal mode
+        this.close.emit();
       } else {
+        // Route mode
         this.router.navigate(['/tasks/', data._id]);
       }
     });
@@ -161,17 +165,19 @@ constructor(
   private putTask(task: Task): void {
     task._id = this.taskId;
     this.taskService.putTask(task).subscribe((data) => {
-      if (this.dialogRef) {
-        this.dialogRef.close(data);
+      if (this.task && this.task._id) {
+        // Modal mode
+        this.close.emit();
       } else {
+        // Route mode
         this.router.navigate(['/tasks/', data._id]);
       }
     });
   }
 
   cancel(): void {
-    if (this.dialogRef) {
-      this.dialogRef.close(null);
+    if (this.task && this.task._id) {
+      this.close.emit();
     } else {
       this.router.navigate(['/tasks']);
     }
