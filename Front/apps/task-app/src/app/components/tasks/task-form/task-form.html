@@ -33,8 +33,6 @@
     <div class="max-w-5xl mx-auto grid grid-cols-3 gap-6">
       <div class="col-span-2 space-y-6">
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <label class="block text-sm font-semibold text-gray-800 mb-2">Description</label>
-          <div class="h-0.5 bg-gray-300 mb-3"></div>
           <app-text-area-field
             class="w-full"
             placeholder="Entrez la description..."
@@ -44,16 +42,12 @@
         </div>
 
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <label class="block text-sm font-semibold text-gray-800 mb-2">Étiquettes</label>
-          <div class="h-0.5 bg-gray-300 mb-3"></div>
           <app-etiquettes
             [etiquettes]="$any(taskForm.get('etiquettes'))">
           </app-etiquettes>
         </div>
 
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <label class="block text-sm font-semibold text-gray-800 mb-2">Sous‑tâches</label>
-          <div class="h-0.5 bg-gray-300 mb-3"></div>
           <app-substack
             [subtaskForm]="$any(taskForm.get('sousTaches'))"
             [statusList]="STATUS">
@@ -61,8 +55,6 @@
         </div>
 
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <label class="block text-sm font-semibold text-gray-800 mb-2">Commentaires</label>
-          <div class="h-0.5 bg-gray-300 mb-3"></div>
           <app-comment
             [commentForm]="$any(taskForm.get('commentaires'))">
           </app-comment>
@@ -71,8 +63,6 @@
 
       <div class="col-span-1 space-y-6">
         <div class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
-          <label class="text-sm font-semibold text-gray-800">Auteur</label>
-          <div class="h-0.5 bg-gray-300 mb-2"></div>
           <app-author-select [authorGroup]="$any(taskForm.get('auteur'))"></app-author-select>
         </div>
 
@@ -85,7 +75,6 @@
               <div>{{ task?.dateCreation | date:'medium' }}</div>
             </div>
             <div>
-              <div class="text-xs text-gray-500">Échéance</div>
                 <app-text-field type="date" class="w-full px-3 py-1 rounded border border-gray-200" [formControl]="$any(taskForm.get('echeance'))" placeholder="Échéance" title="Échéance"></app-text-field>
                 <div *ngIf="$any(taskForm.get('echeance'))?.value || task?.echeance" class="text-xs text-gray-600 mt-1">
                   {{ ($any(taskForm.get('echeance'))?.value || task?.echeance) | date:'medium' }}

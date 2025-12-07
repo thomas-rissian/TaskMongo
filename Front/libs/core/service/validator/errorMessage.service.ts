@@ -18,11 +18,9 @@ export class ErrorMessageService {
     const errors = control.errors ?? {};
     if (!Object.keys(errors).length) return '';
 
-    // pick first error
     const key = Object.keys(errors)[0];
     const payload = errors[key];
 
-    // prefer payload.message if present (withMessage wrapper)
     if (payload && typeof payload === 'object' && typeof payload.message === 'string') {
       return payload.message;
     }
