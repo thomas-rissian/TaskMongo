@@ -1,51 +1,107 @@
-<div class="flex flex-col h-screen bg-gray-100">
-  <div class="shrink-0 px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
-    <h1 class="text-2xl font-bold text-gray-900">Board</h1>
-    <p class="text-sm text-gray-500 mt-1">{{ tasks.length }} tâche(s)</p>
-    <button
-      class="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-      (click)="openEditModal()">
-      Créer une tâche
-    </button>
-  </div>
+<div class="board-container">
+  <!-- Header fixe -->
+  <header class="board-header">
+    <div class="header-content">
+      <h1>Kanban Board</h1>
+      <p class="task-count">{{ tasks.length }} tâche(s)</p>
+    </div>
+    <button class="btn-create" (click)="openEditModal()">+ Créer une tâche</button>
+  </header>
 
-  <div class="flex-1 overflow-hidden">
-    @if (loading) {
-      <div class="flex items-center justify-center h-full">
-        <app-loader></app-loader>
-      </div>
-    } @else {
-      <div class="h-full overflow-x-auto">
-        <div class="inline-flex gap-4 p-6 h-full min-w-min">
-          @for (status of statuses; track status) {
-            <div class="w-80 shrink-0">
-              <app-status-column
-                [status]="status"
-                [tasks]="getTasksByStatus(status)"
-                (editTask)="openEditModal($event)"
-                (removeTask)="removeTask($event)">
-                </app-status-column>
+  <!-- Contenu principal scrollable -->
+  <main class="board-content">
+    <!-- Loader -->
+    <div *ngIf="loading" class="loader-container">
+      <app-loader></app-loader>
+    </div>
+
+    <!-- Board avec colonnes -->
+    <div class="board-columns" *ngIf="!loading">
+      <!-- Colonne pour chaque statut -->
+      <div *ngFor="let status of statuses" class="column-wrapper">
+        <h2 class="column-header">{{ status }}</h2>
+        
+        <!-- Zone de drop -->
+        <div 
+          cdkDropList
+          #droppable="cdkDropList"
+          [id]="'drop-' + status"
+          [cdkDropListData]="getTasksByStatus(status)"
+          [cdkDropListConnectedTo]="getConnectedDropListIds()"
+          cdkDropListSortingDisabled
+          class="drop-zone"
+          (cdkDropListDropped)="drop($event, status)">
+
+          <!-- Cartes de tâches -->
+          <div 
+            *ngFor="let task of getTasksByStatus(status)"
+            cdkDrag
+            class="task-card"
+            (click)="openEditModal(task)">
+            
+            <div class="task-header">
+              <h3>{{ task.titre }}</h3>
+              <button class="btn-delete" (click)="removeTask(task); $event.stopPropagation()">×</button>
             </div>
-          }
-        </div>
-      </div>
-    }
-  </div>
 
-  @if (showModal) {
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" (click)="closeModal()">
-      <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-11/12 h-5/6 flex flex-col" (click)="$event.stopPropagation()">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
-          <h2 class="text-xl font-bold text-gray-900">Éditer la tâche</h2>
-          <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
-            ✕
-          </button>
-        </div>
+            <p class="task-description">{{ task.description }}</p>
 
-        <div class="flex-1 overflow-y-auto p-6">
-          <app-task-form [task]="selectedTask" (close)="closeModal()"></app-task-form>
+            <!-- Priorité et Catégorie -->
+            <div class="task-meta">
+              <span class="priority" [ngClass]="'priority-' + task.priorite">{{ task.priorite }}</span>
+              <span *ngIf="task.categorie" class="category">{{ task.categorie }}</span>
+            </div>
+
+            <!-- Sous-tâches avec checkboxes -->
+            <div class="subtasks" *ngIf="task.sousTaches && task.sousTaches.length">
+              <div class="subtasks-header">
+                Sous-tâches ({{ getCompletedSubtaskCount(task) }}/{{ task.sousTaches.length }})
+              </div>
+              <div class="subtask-item" *ngFor="let subtask of task.sousTaches" (click)="$event.stopPropagation()">
+                <input 
+                  type="checkbox" 
+                  [checked]="isSubtaskDone(subtask)"
+                  (change)="toggleSubtask(task, subtask._id!, subtask.statut!)"
+                  class="subtask-checkbox">
+                <span class="subtask-title" [ngClass]="{ 'done': isSubtaskDone(subtask) }">
+                  {{ subtask.titre }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Commentaires count -->
+            <div class="task-footer" *ngIf="task.commentaires && task.commentaires.length">
+              <span class="comment-count">💬 {{ task.commentaires.length }}</span>
+            </div>
+          </div>
+
+          <!-- Placeholder pour drop vide -->
+          <div class="drop-placeholder" *ngIf="getTasksByStatus(status).length === 0">
+            Aucune tâche
+          </div>
         </div>
       </div>
     </div>
-  }
+  </main>
+
+  <!-- Footer fixe -->
+  <footer class="board-footer">
+    <p>&copy; 2024 TaskMongo - Task Management</p>
+  </footer>
+
+  <!-- Modal pour éditer une tâche -->
+  <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Éditer la tâche</h2>
+        <button class="modal-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-task-form 
+          [task]="selectedTask || undefined"
+          (close)="closeModal()">
+        </app-task-form>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,12 @@
-<main class="main">
-  <app-header [headerList]="['home', 'tasks']"></app-header>
-  <router-outlet></router-outlet>
-  <app-footer></app-footer>
-</main>
+<ng-container [ngSwitch]="isFullscreenRoute()">
+  <main class="main" *ngSwitchCase="true">
+    <router-outlet></router-outlet>
+  </main>
+  
+  <main class="main" *ngSwitchCase="false">
+    <app-header [headerList]="['home', 'tasks']"></app-header>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </main>
+</ng-container>
 

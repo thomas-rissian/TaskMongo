@@ -6,7 +6,7 @@
     (noneSelect)="showAuthorForm($event)"
     />
 
-    @if(IsAuthorFormVisible){
-        <app-author-edit 
-            [authorGroup]="$any(authorGroup)" />
-    }
+@if(IsAuthorFormVisible){
+    <app-author-edit 
+        [authorGroup]="$any(authorGroup)" />
+}

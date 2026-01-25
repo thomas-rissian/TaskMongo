@@ -51,6 +51,8 @@ export class AuthorSelect implements OnInit, AfterViewInit, OnDestroy {
             const cur = this.authorGroup.value;
             if (!cur || cur.email !== item.email) {
               this.authorGroup.patchValue(item);
+              // Afficher automatiquement le formulaire d'édition
+              this.IsAuthorFormVisible = true;
             }
           }
         }
@@ -68,7 +70,6 @@ export class AuthorSelect implements OnInit, AfterViewInit, OnDestroy {
     if(isNone){
       this.authorGroup.reset();
     }
-    
   }
 
   private updateSelectionFromForm(): void {

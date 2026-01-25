@@ -1,4 +1,5 @@
 const Task = require('../models/task.schema');
+const { logMultipleModifications } = require('../utils/history.utils');
 
 // ------------------ CREATE ------------------
 exports.create = async (req, res) => {
@@ -24,7 +25,7 @@ exports.create = async (req, res) => {
 // ------------------ READ ALL ------------------
 exports.getAll = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().sort({ dateCreation: -1 });
     res.json(tasks);
 
   } catch (err) {
@@ -37,9 +38,7 @@ exports.getAll = async (req, res) => {
 // ------------------ READ ONE ------------------
 exports.getOne = async (req, res) => {
   try {
-    console.log(req.params.id);
     const task = await Task.findById(req.params.id);
-    console.log(task);
     if (!task) {
       return res.status(404).json({ error: 'Tâche non trouvée' });
     }
@@ -56,16 +55,23 @@ exports.getOne = async (req, res) => {
 // ------------------ UPDATE ------------------
 exports.update = async (req, res) => {
   try {
+    const taskId = req.params.id;
     const payload = req.body;
+
+    // Récupérer l'ancienne tâche pour l'historique
+    const oldTask = await Task.findById(taskId);
+    if (!oldTask) {
+      return res.status(404).json({ error: 'Tâche non trouvée' });
+    }
+
     const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
+      taskId,
       payload,
       { new: true, runValidators: true }
     );
-    
-    if (!updatedTask) {
-      return res.status(404).json({ error: 'Tâche non trouvée' });
-    }
+
+    // Enregistrer les modifications dans l'historique
+    await logMultipleModifications(taskId, oldTask.toObject(), payload);
 
     res.json(updatedTask);
 
@@ -85,7 +91,7 @@ exports.remove = async (req, res) => {
       return res.status(404).json({ error: 'Tâche non trouvée' });
     }
 
-    res.json({ message: 'Tâche supprimée avec succès' });
+    res.json({ message: 'Tâche supprimée avec succès', deletedTask: deleted });
 
   } catch (err) {
     console.error(err);
@@ -97,22 +103,78 @@ exports.remove = async (req, res) => {
 // ------------------ FILTER + SORT ------------------
 exports.filtered = async (req, res) => {
   try {
-    const { statut, priorite, categorie, etiquette, echeanceAvant, sort } = req.query;
+    const { 
+      statut, 
+      priorite, 
+      categorie, 
+      etiquette, 
+      avant, 
+      apres, 
+      q,
+      tri,
+      ordre
+    } = req.query;
 
     const filter = {};
 
+    // Filtres simples
     if (statut) filter.statut = statut;
     if (priorite) filter.priorite = priorite;
     if (categorie) filter.categorie = categorie;
     if (etiquette) filter.etiquettes = { $in: [etiquette] };
-    if (echeanceAvant) filter.echeance = { $lte: new Date(echeanceAvant) };
 
-    const tasks = await Task.find(filter).sort(sort || "");
+    // Filtres de date
+    if (avant || apres) {
+      filter.echeance = {};
+      if (avant) filter.echeance.$lte = new Date(avant);
+      if (apres) filter.echeance.$gte = new Date(apres);
+    }
 
+    // Recherche texte libre
+    if (q) {
+      filter.$text = { $search: q };
+    }
+
+    let query = Task.find(filter);
+
+    // Tri
+    const sortObj = {};
+    if (tri) {
+      const direction = ordre === 'desc' ? -1 : 1;
+      sortObj[tri] = direction;
+      query = query.sort(sortObj);
+    } else {
+      query = query.sort({ dateCreation: -1 }); // Tri par défaut : création récente
+    }
+
+    const tasks = await query.exec();
     res.json(tasks);
 
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur", details: err.message });
+  }
+};
+
+
+// ------------------ GET HISTORY ------------------
+exports.getHistory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findById(id);
+
+    if (!task) {
+      return res.status(404).json({ error: 'Tâche non trouvée' });
+    }
+
+    res.json({
+      taskId: task._id,
+      titre: task.titre,
+      historique: task.historiqueModifications.sort((a, b) => b.date - a.date)
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur serveur', details: err.message });
   }
 };
