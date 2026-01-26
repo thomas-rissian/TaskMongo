@@ -74,8 +74,8 @@ const TaskFilterSchema = z.object({
   priorite: z.enum(['Low', 'Medium', 'High', 'Critical']).optional(),
   categorie: z.string().trim().optional(),
   etiquette: z.string().trim().optional(),
-  avant: z.string().datetime().optional(),
-  apres: z.string().datetime().optional(),
+  avant: z.string().regex(/^\d{4}-\d{2}-\d{2}/, 'Format de date invalide').optional(),
+  apres: z.string().regex(/^\d{4}-\d{2}-\d{2}/, 'Format de date invalide').optional(),
   q: z.string().trim().optional(),
   tri: z.string().optional(),
   ordre: z.enum(['asc', 'desc']).optional()

@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TaskEditableContainer } from '@libs/ui/inputs/TaskEditableContainer/TaskEditableContainer';
 import { TextAreaField } from '@libs/ui/component.lib.include';
+import { CurrentUserService } from '@task-app/core/service/current-user.service';
 
 @Component({
   selector: 'app-comment',
@@ -17,7 +18,10 @@ export class Comment {
 
   commentEditList: string[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private currentUserService: CurrentUserService
+  ) {}
 
   getControls(): FormGroup[] {
     return (this.commentForm as FormArray).controls as FormGroup[];
@@ -36,12 +40,20 @@ export class Comment {
     }
     this.error = "";
 
+    // Récupérer l'utilisateur actuel
+    const currentUser = this.currentUserService.getUser();
+    const auteur = currentUser || {
+      nom: 'Anonyme',
+      prenom: '',
+      email: 'anonymous@example.com'
+    };
+
     const group = this.fb.group({
       _id: [null],
       auteur: this.fb.group({
-        nom: ['test'],
-        prenom: ['test'],
-        email: ['test@test.fr', [Validators.email]]
+        nom: [auteur.nom, Validators.required],
+        prenom: [auteur.prenom, Validators.required],
+        email: [auteur.email, [Validators.required, Validators.email]]
       }),
       date: [new Date().toISOString()],
       contenu: [text, Validators.required]

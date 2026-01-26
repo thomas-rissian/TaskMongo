@@ -62,114 +62,39 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Applique les filtres LOCALEMENT sans API call
+   * Applique les filtres via l'API /search
    */
   applyFilters(filters: FilterParams): void {
     this.currentFilters = filters;
+    this.loading = true;
 
-    // Filtrer les tâches localement
-    let filtered = this.tasks.filter((task: Task) => {
-      // Filtre recherche (q) - LIKE %word% dans plusieurs champs
-      if (filters.q) {
-        const query = filters.q.toLowerCase();
-        const matchTitle = task.titre?.toLowerCase().includes(query);
-        const matchDesc = task.description?.toLowerCase().includes(query);
-        const matchAuthorNom = task.auteur?.nom?.toLowerCase().includes(query);
-        const matchAuthorPrenom = task.auteur?.prenom?.toLowerCase().includes(query);
-        const matchCategorie = task.categorie?.toLowerCase().includes(query);
-        const matchEtiquettes = task.etiquettes?.some(e => e.toLowerCase().includes(query));
-        
-        if (!matchTitle && !matchDesc && !matchAuthorNom && !matchAuthorPrenom && !matchCategorie && !matchEtiquettes) {
-          return false;
-        }
+    // Construire les paramètres pour l'API
+    const searchParams: any = {};
+    if (filters.q) searchParams.q = filters.q;
+    if (filters.statut) searchParams.statut = filters.statut;
+    if (filters.priorite) searchParams.priorite = filters.priorite;
+    if (filters.categorie) searchParams.categorie = filters.categorie;
+    if (filters.etiquette) searchParams.etiquette = filters.etiquette;
+    if (filters.avant) searchParams.avant = filters.avant;
+    if (filters.apres) searchParams.apres = filters.apres;
+    if (filters.tri) searchParams.tri = filters.tri;
+    if (filters.ordre) searchParams.ordre = filters.ordre;
+
+    // Appeler l'API search
+    this.tasksService.searchTasks(searchParams).subscribe({
+      next: (data: Task[]) => {
+        this.tasks = data;
+        this.filteredTasks = data;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erreur recherche:', err);
+        this.loading = false;
+        this.filteredTasks = [];
+        this.cdr.detectChanges();
       }
-
-      // Filtre statut
-      if (filters.statut && task.statut !== filters.statut) {
-        return false;
-      }
-
-      // Filtre priorité
-      if (filters.priorite && task.priorite !== filters.priorite) {
-        return false;
-      }
-
-      // Filtre catégorie
-      if (filters.categorie && task.categorie !== filters.categorie) {
-        return false;
-      }
-
-      // Filtre étiquette - LIKE %word% (cherche les lettres dedans)
-      if (filters.etiquette) {
-        const etiquetteQuery = filters.etiquette.toLowerCase();
-        const matchEtiquette = task.etiquettes?.some(e => e.toLowerCase().includes(etiquetteQuery));
-        if (!matchEtiquette) {
-          return false;
-        }
-      }
-
-      // Filtre date avant
-      if (filters.avant) {
-        const dateAvant = new Date(filters.avant);
-        const taskDate = task.echeance ? new Date(task.echeance) : new Date('9999-12-31');
-        if (taskDate > dateAvant) return false;
-      }
-
-      // Filtre date après
-      if (filters.apres) {
-        const dateApres = new Date(filters.apres);
-        const taskDate = task.echeance ? new Date(task.echeance) : new Date('1900-01-01');
-        if (taskDate < dateApres) return false;
-      }
-
-      return true;
     });
-
-    // Appliquer le tri
-    if (filters.tri) {
-      const tri = filters.tri;
-      const ordre = filters.ordre === 'asc' ? 1 : -1;
-
-      filtered.sort((a: Task, b: Task) => {
-        let valA: any;
-        let valB: any;
-
-        switch (tri) {
-          case 'dateCreation':
-            valA = a.dateCreation ? new Date(a.dateCreation).getTime() : 0;
-            valB = b.dateCreation ? new Date(b.dateCreation).getTime() : 0;
-            break;
-          case 'echeance':
-            valA = a.echeance ? new Date(a.echeance).getTime() : 0;
-            valB = b.echeance ? new Date(b.echeance).getTime() : 0;
-            break;
-          case 'priorite':
-            const prioriteOrder: { [key: string]: number } = {
-              'Critical': 4,
-              'High': 3,
-              'Medium': 2,
-              'Low': 1
-            };
-            valA = prioriteOrder[a.priorite || ''] || 0;
-            valB = prioriteOrder[b.priorite || ''] || 0;
-            break;
-          case 'titre':
-            valA = (a.titre || '').toLowerCase();
-            valB = (b.titre || '').toLowerCase();
-            break;
-          default:
-            valA = a.dateCreation ? new Date(a.dateCreation).getTime() : 0;
-            valB = b.dateCreation ? new Date(b.dateCreation).getTime() : 0;
-        }
-
-        if (valA < valB) return -1 * ordre;
-        if (valA > valB) return 1 * ordre;
-        return 0;
-      });
-    }
-
-    this.filteredTasks = filtered;
-    this.cdr.detectChanges();
   }
 
   getTasksByStatus(status: string): Task[] {

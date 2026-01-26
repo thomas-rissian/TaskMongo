@@ -3,11 +3,12 @@ import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../../libs/ui/layout/header/header';
 import { Footer } from '../../../../libs/ui/layout/footer/footer';
+import { UserRegistrationComponent } from './components/user-registration/user-registration';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, UserRegistrationComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

@@ -100,54 +100,43 @@ exports.remove = async (req, res) => {
 // ------------------ FILTER + SORT ------------------
 exports.filtered = async (req, res) => {
   try {
-    // Les query parameters sont déjà validées par le middleware Zod
-    const query = req.validatedQuery || req.query;
-    
-    const { 
-      statut, 
-      priorite, 
-      categorie, 
-      etiquette, 
-      avant, 
-      apres, 
-      q,
-      tri,
-      ordre
-    } = query;
+    const { statut, priorite, categorie, etiquette, avant, apres, q, tri, ordre } = req.validatedQuery || req.query;
 
     const filter = {};
 
-    // Filtres simples
     if (statut) filter.statut = statut;
     if (priorite) filter.priorite = priorite;
     if (categorie) filter.categorie = categorie;
-    if (etiquette) filter.etiquettes = { $in: [etiquette] };
+    if (etiquette) filter.etiquettes = { $regex: etiquette, $options: 'i' };
 
-    // Filtres de date
     if (avant || apres) {
       filter.echeance = {};
       if (avant) filter.echeance.$lte = new Date(avant);
       if (apres) filter.echeance.$gte = new Date(apres);
     }
 
-    // Recherche texte libre
     if (q) {
-      filter.$text = { $search: q };
+      const regex = { $regex: q, $options: 'i' };
+      filter.$or = [
+        { titre: regex },
+        { description: regex },
+        { 'auteur.nom': regex },
+        { 'auteur.prenom': regex },
+        { categorie: regex },
+        { etiquettes: regex }
+      ];
     }
 
-    let queryBuilder = Task.find(filter);
-
-    // Tri
-    const sortObj = {};
-    if (tri) {
-      const direction = ordre === 'desc' ? -1 : 1;
-      sortObj[tri] = direction;
-      queryBuilder = queryBuilder.sort(sortObj);
+    const sort = {};
+    const validSortFields = ['dateCreation', 'echeance', 'priorite', 'titre'];
+    
+    if (tri && validSortFields.includes(tri)) {
+      sort[tri] = ordre === 'desc' ? -1 : 1;
     } else {
-      queryBuilder = queryBuilder.sort({ dateCreation: -1 }); // Tri par défaut : création récente
+      sort.dateCreation = -1;
     }
 
-    const tasks = await queryBuilder.exec();
+    const tasks = await Task.find(filter).sort(sort).exec();
     res.json(tasks);
 
   } catch (err) {
