@@ -5,7 +5,10 @@ exports.createSubtask = async (req, res) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ error: "Tâche non trouvée" });
 
-    task.sousTaches.push(req.body);
+    // Les données sont déjà validées par le middleware Zod
+    const subtaskData = req.validatedData;
+    
+    task.sousTaches.push(subtaskData);
     await task.save();
 
     res.status(201).json(task);
@@ -22,7 +25,10 @@ exports.updateSubtask = async (req, res) => {
     const sub = task.sousTaches.id(req.params.sid);
     if (!sub) return res.status(404).json({ error: "Sous-tâche introuvable" });
 
-    Object.assign(sub, req.body);
+    // Les données sont déjà validées par le middleware Zod
+    const updatedData = req.validatedData;
+    
+    Object.assign(sub, updatedData);
     await task.save();
 
     res.json(task);

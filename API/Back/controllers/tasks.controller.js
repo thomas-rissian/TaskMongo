@@ -4,11 +4,7 @@ const { logMultipleModifications } = require('../utils/history.utils');
 // ------------------ CREATE ------------------
 exports.create = async (req, res) => {
   try {
-    const payload = req.body;
-
-    if (!payload.titre || !payload.auteur || !payload.auteur.nom || !payload.auteur.email) {
-      return res.status(400).json({ error: 'titre et auteur{nom,email} requis' });
-    }
+    const payload = req.validatedData;
 
     const task = new Task(payload);
     const saved = await task.save();
@@ -56,7 +52,8 @@ exports.getOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const taskId = req.params.id;
-    const payload = req.body;
+    // Les données sont déjà validées par le middleware Zod
+    const payload = req.validatedData;
 
     // Récupérer l'ancienne tâche pour l'historique
     const oldTask = await Task.findById(taskId);
@@ -103,6 +100,9 @@ exports.remove = async (req, res) => {
 // ------------------ FILTER + SORT ------------------
 exports.filtered = async (req, res) => {
   try {
+    // Les query parameters sont déjà validées par le middleware Zod
+    const query = req.validatedQuery || req.query;
+    
     const { 
       statut, 
       priorite, 
@@ -113,7 +113,7 @@ exports.filtered = async (req, res) => {
       q,
       tri,
       ordre
-    } = req.query;
+    } = query;
 
     const filter = {};
 
@@ -135,19 +135,19 @@ exports.filtered = async (req, res) => {
       filter.$text = { $search: q };
     }
 
-    let query = Task.find(filter);
+    let queryBuilder = Task.find(filter);
 
     // Tri
     const sortObj = {};
     if (tri) {
       const direction = ordre === 'desc' ? -1 : 1;
       sortObj[tri] = direction;
-      query = query.sort(sortObj);
+      queryBuilder = queryBuilder.sort(sortObj);
     } else {
-      query = query.sort({ dateCreation: -1 }); // Tri par défaut : création récente
+      queryBuilder = queryBuilder.sort({ dateCreation: -1 }); // Tri par défaut : création récente
     }
 
-    const tasks = await query.exec();
+    const tasks = await queryBuilder.exec();
     res.json(tasks);
 
   } catch (err) {

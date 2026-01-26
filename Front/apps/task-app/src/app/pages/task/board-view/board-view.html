@@ -8,6 +8,9 @@
     <button class="btn-create" (click)="openEditModal()">+ Créer une tâche</button>
   </header>
 
+  <!-- Barre de filtre -->
+  <app-task-filter (filterChange)="applyFilters($event)"></app-task-filter>
+
   <!-- Contenu principal scrollable -->
   <main class="board-content">
     <!-- Loader -->
@@ -15,8 +18,13 @@
       <app-loader></app-loader>
     </div>
 
+    <!-- Pas de résultats -->
+    <div *ngIf="!loading && tasks.length === 0" class="no-results">
+      <p>Aucune tâche trouvée</p>
+    </div>
+
     <!-- Board avec colonnes -->
-    <div class="board-columns" *ngIf="!loading">
+    <div class="board-columns" *ngIf="!loading && tasks.length > 0">
       <!-- Colonne pour chaque statut -->
       <div *ngFor="let status of statuses" class="column-wrapper">
         <h2 class="column-header">{{ status }}</h2>

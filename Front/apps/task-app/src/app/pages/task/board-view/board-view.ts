@@ -7,20 +7,23 @@ import { Task } from '../../../models/task.model';
 import { STATUS } from '../../../models/status.model';
 import { Loader } from '@libs/ui/component.lib.include';
 import { TaskForm } from '../../../components/tasks/task-form/task-form';
+import { TaskFilterComponent, FilterParams } from '../../../components/tasks/task-filter/task-filter';
 
 @Component({
   selector: 'app-board-view',
   standalone: true,
-  imports: [CommonModule, DragDropModule, Loader, TaskForm],
+  imports: [CommonModule, DragDropModule, Loader, TaskForm, TaskFilterComponent],
   templateUrl: './board-view.html',
   styleUrls: ['./board-view.scss']
 })
 export class BoardViewComponent implements OnInit, AfterViewInit {
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
   statuses = STATUS;
   loading = true;
   showModal = false;
   selectedTask: Task | null = null;
+  currentFilters: FilterParams = {};
 
   @ViewChildren(CdkDropList) dropLists!: QueryList<CdkDropList>;
 
@@ -49,16 +52,75 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
   }
 
   loadTasks(): void {
+    // Charger TOUTES les tâches UNE SEULE FOIS au démarrage
     this.tasksService.getTasks().subscribe((data: Task[]) => {
       this.tasks = data;
+      this.filteredTasks = data;
       this.loading = false;
       this.cdr.detectChanges();
     });
   }
 
+  /**
+   * Applique les filtres LOCALEMENT sans API call
+   */
+  applyFilters(filters: FilterParams): void {
+    this.currentFilters = filters;
+
+    // Si aucun filtre, afficher toutes les tâches
+    if (Object.keys(filters).length === 0) {
+      this.filteredTasks = [...this.tasks];
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // Filtrer les tâches localement
+    this.filteredTasks = this.tasks.filter((task: Task) => {
+      // Filtre recherche (q) - cherche dans le titre et la description
+      if (filters.q) {
+        const query = filters.q.toLowerCase();
+        const matchTitle = task.titre?.toLowerCase().includes(query);
+        const matchDesc = task.description?.toLowerCase().includes(query);
+        if (!matchTitle && !matchDesc) return false;
+      }
+
+      // Filtre statut
+      if (filters.statut && task.statut !== filters.statut) {
+        return false;
+      }
+
+      // Filtre priorité
+      if (filters.priorite && task.priorite !== filters.priorite) {
+        return false;
+      }
+
+      // Filtre catégorie (exemple : vérifier si dans les tags ou catégories)
+      if (filters.categorie) {
+        // À adapter selon votre structure de données
+        if (task.categorie !== filters.categorie) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    this.cdr.detectChanges();
+  }
+
   getTasksByStatus(status: string): Task[] {
-    if (!this.tasks?.length) return [];
-    return this.tasks.filter((t: Task) => t.statut === status);
+    if (!this.filteredTasks?.length) return [];
+    return this.filteredTasks.filter((t: Task) => t.statut === status);
+  }
+
+  /**
+   * Trouve une tâche dans le tableau source par ID et la met à jour
+   */
+  private updateTaskInSource(updatedTask: Task): void {
+    const index = this.tasks.findIndex(t => t._id === updatedTask._id);
+    if (index !== -1) {
+      this.tasks[index] = updatedTask;
+    }
   }
 
   openEditModal(task?: Task) {
@@ -68,14 +130,19 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
 
   removeTask(task: Task) {
     this.tasksService.deleteTask(task._id!).subscribe(() => {
-      this.loadTasks();
+      this.applyFilters(this.currentFilters);
     });
   }
 
   closeModal() {
     this.showModal = false;
     this.selectedTask = null;
-    this.loadTasks();
+    // Recharger les données et réappliquer les filtres
+    this.tasksService.getTasks().subscribe((data: Task[]) => {
+      this.tasks = data;
+      this.applyFilters(this.currentFilters);
+      this.cdr.detectChanges();
+    });
   }
 
   // Drag and Drop
@@ -91,12 +158,13 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
     // Cas 2: Changer de colonne - mettre à jour le statut et sauvegarder
     movedTask.statut = newStatus as any;
     this.tasksService.putTask(movedTask).subscribe({
-      next: () => {
-        this.loadTasks();
+      next: (updatedTask: Task) => {
+        this.updateTaskInSource(updatedTask);
+        this.applyFilters(this.currentFilters);
       },
       error: (err: any) => {
         console.error('Erreur mise à jour statut:', err);
-        this.loadTasks();
+        this.applyFilters(this.currentFilters);
       }
     });
   }
@@ -114,12 +182,13 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
       
       // Faire un PUT de la tâche entière avec la sous-tâche modifiée
       this.tasksService.putTask(task).subscribe({
-        next: () => {
-          this.loadTasks();
+        next: (updatedTask: Task) => {
+          this.updateTaskInSource(updatedTask);
+          this.applyFilters(this.currentFilters);
         },
-        error: (err: any) => {
+        error: (err) => {
           console.error('Erreur mise à jour sous-tâche:', err);
-          this.loadTasks();
+          this.applyFilters(this.currentFilters);
         }
       });
     }
