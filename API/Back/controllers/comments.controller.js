@@ -5,7 +5,6 @@ exports.createComment = async (req, res) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ error: "Tâche non trouvée" });
 
-    // Les données sont déjà validées par le middleware Zod
     const commentData = req.validatedData;
     
     task.commentaires.push(commentData);

@@ -31,6 +31,7 @@ export class TaskForm implements OnInit, OnChanges {
 
   PRIORITY: string[] = PRIORITY;
   STATUS: string[] = STATUS;
+  CATEGORIES: string[] = ['Backend', 'Frontend', 'Database', 'DevOps', 'Testing'];
 
   taskForm!: FormGroup;
   @Input() task: Task | null | undefined;
@@ -58,6 +59,7 @@ export class TaskForm implements OnInit, OnChanges {
 
   get titreControl(): FormControl { return this.taskForm.get('titre') as FormControl; }
   get descriptionControl(): FormControl { return this.taskForm.get('description') as FormControl; }
+  get categorieControl(): FormControl { return this.taskForm.get('categorie') as FormControl; }
   get auteurGroup(): FormGroup { return this.taskForm.get('auteur') as FormGroup; }
   get commentaires(): FormArray { return this.taskForm.get('commentaires') as FormArray; }
   get sousTaches(): FormArray { return this.taskForm.get('sousTaches') as FormArray; }
@@ -69,6 +71,7 @@ export class TaskForm implements OnInit, OnChanges {
     this.taskForm = this.fb.group({
       titre: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
+      categorie: [''],
       auteur: this.fb.group({
         nom: ['', [Validators.required, Validators.minLength(3)]],
         prenom: ['', [Validators.required, Validators.minLength(3)]],
@@ -149,21 +152,38 @@ export class TaskForm implements OnInit, OnChanges {
     console.log('Submitting form with value:', this.taskForm.value);
     const payload = { ...this.taskForm.value } as any;
 
-    payload.sousTaches = (payload.sousTaches ?? []).map((s: any) => ({
-      ...s,
-      echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
-    }));
+    payload.sousTaches = (payload.sousTaches ?? []).map((s: any) => {
+      const cleanSubtask: any = {
+        titre: s.titre,
+        statut: s.statut,
+        echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
+      };
+      // Ajouter _id seulement s'il existe et n'est pas null
+      if (s._id) {
+        cleanSubtask._id = s._id;
+      }
+      return cleanSubtask;
+    });
 
     payload.echeance = payload.echeance ? new Date(payload.echeance).toISOString() : null;
 
     payload.etiquettes = (payload.etiquettes ?? []).filter((tag: any) => tag && typeof tag === 'string');
 
-    payload.commentaires = (payload.commentaires ?? []).map((c: any) => ({
-      ...c,
-      date: c.date ? new Date(c.date).toISOString() : new Date().toISOString(),
-    }));
+    payload.commentaires = (payload.commentaires ?? []).map((c: any) => {
+      const cleanComment: any = {
+        auteur: c.auteur,
+        contenu: c.contenu,
+        date: c.date ? new Date(c.date).toISOString() : new Date().toISOString(),
+      };
+      // Ajouter _id seulement s'il existe et n'est pas null
+      if (c._id) {
+        cleanComment._id = c._id;
+      }
+      return cleanComment;
+    });
 
-    if (this.taskId) {
+    // Vérifier si c'est une mise à jour (taskId depuis URL OU task._id depuis objet)
+    if (this.taskId || this.task?._id) {
       this.putTask(payload);
     } else {
       this.postTask(payload);
@@ -181,8 +201,24 @@ export class TaskForm implements OnInit, OnChanges {
   }
 
   private putTask(task: Task): void {
-    task._id = this.taskId;
-    this.taskService.putTask(task).subscribe((data) => {
+    const taskId = this.taskId || this.task?._id;
+    
+    // Pour UPDATE, on envoie tous les champs acceptés par TaskUpdateSchema
+    const updatePayload = {
+      titre: task.titre,
+      description: task.description,
+      priorite: task.priorite,
+      statut: task.statut,
+      categorie: task.categorie,
+      etiquettes: task.etiquettes,
+      echeance: task.echeance,
+      auteur: task.auteur,
+      sousTaches: task.sousTaches,
+      commentaires: task.commentaires,
+    };
+    
+    // Le service prendra l'ID depuis la variable locale pour construire l'URL
+    this.taskService.putTaskWithId(taskId, updatePayload).subscribe((data) => {
       if (this.task) {
         this.close.emit();
         return;

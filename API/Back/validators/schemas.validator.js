@@ -17,6 +17,7 @@ const AuthorSchema = z.object({
  * Schéma pour les sous-tâches
  */
 const SubtaskSchema = z.object({
+  _id: z.string().optional().nullable(),
   titre: z.string().trim().min(1, 'Le titre de la sous-tâche est requis'),
   statut: z.enum(['Backlog', 'Ready', 'In progress', 'In review', 'Done']).default('Backlog'),
   echeance: z.string().datetime().optional().nullable()
@@ -26,6 +27,7 @@ const SubtaskSchema = z.object({
  * Schéma pour les commentaires
  */
 const CommentSchema = z.object({
+  _id: z.string().optional().nullable(),
   auteur: AuthorSchema,
   contenu: z.string().trim().min(1, 'Le commentaire ne peut pas être vide').min(3, 'Le commentaire doit avoir au moins 3 caractères'),
   date: z.string().datetime().optional()
@@ -59,7 +61,9 @@ const TaskUpdateSchema = z.object({
   categorie: z.string().trim().optional(),
   etiquettes: z.array(z.string()).optional(),
   echeance: z.string().datetime().optional().nullable(),
-  auteur: AuthorSchema.optional()
+  auteur: AuthorSchema.optional(),
+  sousTaches: z.array(SubtaskSchema).optional(),
+  commentaires: z.array(CommentSchema).optional()
 }).strict(); // Rejette les propriétés supplémentaires
 
 /**

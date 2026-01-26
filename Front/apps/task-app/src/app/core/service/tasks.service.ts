@@ -62,6 +62,11 @@ export class TasksService {
         return this.http.put<Task>(`${BASE_URL}/${task._id}`, task);
     }
 
+    // Mettre à jour une tâche avec ID séparé (pour éviter d'inclure _id dans le payload)
+    putTaskWithId(id: string | undefined, task: any): Observable<Task> {
+        return this.http.put<Task>(`${BASE_URL}/${id}`, task);
+    }
+
     // Supprimer une tâche
     deleteTask(id: string): Observable<void> {
         return this.http.delete<void>(`${BASE_URL}/${id}`);

@@ -24,6 +24,12 @@
             [listField]="PRIORITY"
             [formControl]="$any(taskForm.get('priorite'))">
           </app-select-simple-field>
+
+          <app-select-simple-field
+            class="w-36"
+            [listField]="CATEGORIES"
+            [formControl]="$any(taskForm.get('categorie'))">
+          </app-select-simple-field>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-const Task = require('../models/task.schema'); // On a besoin du modèle Task car les auteurs sont dedans
+const Task = require('../models/task.schema');
 
 exports.getAllAuthors = async (req, res) => {
     try {

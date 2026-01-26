@@ -67,21 +67,21 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
   applyFilters(filters: FilterParams): void {
     this.currentFilters = filters;
 
-    // Si aucun filtre, afficher toutes les tâches
-    if (Object.keys(filters).length === 0) {
-      this.filteredTasks = [...this.tasks];
-      this.cdr.detectChanges();
-      return;
-    }
-
     // Filtrer les tâches localement
-    this.filteredTasks = this.tasks.filter((task: Task) => {
-      // Filtre recherche (q) - cherche dans le titre et la description
+    let filtered = this.tasks.filter((task: Task) => {
+      // Filtre recherche (q) - LIKE %word% dans plusieurs champs
       if (filters.q) {
         const query = filters.q.toLowerCase();
         const matchTitle = task.titre?.toLowerCase().includes(query);
         const matchDesc = task.description?.toLowerCase().includes(query);
-        if (!matchTitle && !matchDesc) return false;
+        const matchAuthorNom = task.auteur?.nom?.toLowerCase().includes(query);
+        const matchAuthorPrenom = task.auteur?.prenom?.toLowerCase().includes(query);
+        const matchCategorie = task.categorie?.toLowerCase().includes(query);
+        const matchEtiquettes = task.etiquettes?.some(e => e.toLowerCase().includes(query));
+        
+        if (!matchTitle && !matchDesc && !matchAuthorNom && !matchAuthorPrenom && !matchCategorie && !matchEtiquettes) {
+          return false;
+        }
       }
 
       // Filtre statut
@@ -94,17 +94,81 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
         return false;
       }
 
-      // Filtre catégorie (exemple : vérifier si dans les tags ou catégories)
-      if (filters.categorie) {
-        // À adapter selon votre structure de données
-        if (task.categorie !== filters.categorie) {
+      // Filtre catégorie
+      if (filters.categorie && task.categorie !== filters.categorie) {
+        return false;
+      }
+
+      // Filtre étiquette - LIKE %word% (cherche les lettres dedans)
+      if (filters.etiquette) {
+        const etiquetteQuery = filters.etiquette.toLowerCase();
+        const matchEtiquette = task.etiquettes?.some(e => e.toLowerCase().includes(etiquetteQuery));
+        if (!matchEtiquette) {
           return false;
         }
+      }
+
+      // Filtre date avant
+      if (filters.avant) {
+        const dateAvant = new Date(filters.avant);
+        const taskDate = task.echeance ? new Date(task.echeance) : new Date('9999-12-31');
+        if (taskDate > dateAvant) return false;
+      }
+
+      // Filtre date après
+      if (filters.apres) {
+        const dateApres = new Date(filters.apres);
+        const taskDate = task.echeance ? new Date(task.echeance) : new Date('1900-01-01');
+        if (taskDate < dateApres) return false;
       }
 
       return true;
     });
 
+    // Appliquer le tri
+    if (filters.tri) {
+      const tri = filters.tri;
+      const ordre = filters.ordre === 'asc' ? 1 : -1;
+
+      filtered.sort((a: Task, b: Task) => {
+        let valA: any;
+        let valB: any;
+
+        switch (tri) {
+          case 'dateCreation':
+            valA = a.dateCreation ? new Date(a.dateCreation).getTime() : 0;
+            valB = b.dateCreation ? new Date(b.dateCreation).getTime() : 0;
+            break;
+          case 'echeance':
+            valA = a.echeance ? new Date(a.echeance).getTime() : 0;
+            valB = b.echeance ? new Date(b.echeance).getTime() : 0;
+            break;
+          case 'priorite':
+            const prioriteOrder: { [key: string]: number } = {
+              'Critical': 4,
+              'High': 3,
+              'Medium': 2,
+              'Low': 1
+            };
+            valA = prioriteOrder[a.priorite || ''] || 0;
+            valB = prioriteOrder[b.priorite || ''] || 0;
+            break;
+          case 'titre':
+            valA = (a.titre || '').toLowerCase();
+            valB = (b.titre || '').toLowerCase();
+            break;
+          default:
+            valA = a.dateCreation ? new Date(a.dateCreation).getTime() : 0;
+            valB = b.dateCreation ? new Date(b.dateCreation).getTime() : 0;
+        }
+
+        if (valA < valB) return -1 * ordre;
+        if (valA > valB) return 1 * ordre;
+        return 0;
+      });
+    }
+
+    this.filteredTasks = filtered;
     this.cdr.detectChanges();
   }
 
@@ -157,7 +221,42 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
 
     // Cas 2: Changer de colonne - mettre à jour le statut et sauvegarder
     movedTask.statut = newStatus as any;
-    this.tasksService.putTask(movedTask).subscribe({
+    
+    // Préparer le payload avec dates au format ISO et _id seulement si présents
+    const cleanSousTaches = (movedTask.sousTaches || []).map((s: any) => {
+      const clean: any = {
+        titre: s.titre,
+        statut: s.statut,
+        echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
+      };
+      if (s._id) clean._id = s._id;
+      return clean;
+    });
+
+    const cleanCommentaires = (movedTask.commentaires || []).map((c: any) => {
+      const clean: any = {
+        auteur: c.auteur,
+        contenu: c.contenu,
+        date: c.date ? new Date(c.date).toISOString() : new Date().toISOString(),
+      };
+      if (c._id) clean._id = c._id;
+      return clean;
+    });
+
+    const updatePayload = {
+      titre: movedTask.titre,
+      description: movedTask.description,
+      priorite: movedTask.priorite,
+      statut: movedTask.statut,
+      categorie: movedTask.categorie,
+      etiquettes: movedTask.etiquettes,
+      echeance: movedTask.echeance ? new Date(movedTask.echeance).toISOString() : null,
+      auteur: movedTask.auteur,
+      sousTaches: cleanSousTaches,
+      commentaires: cleanCommentaires,
+    };
+    
+    this.tasksService.putTaskWithId(movedTask._id, updatePayload).subscribe({
       next: (updatedTask: Task) => {
         this.updateTaskInSource(updatedTask);
         this.applyFilters(this.currentFilters);
@@ -180,8 +279,42 @@ export class BoardViewComponent implements OnInit, AfterViewInit {
     if (subtask) {
       subtask.statut = newStatus as any;
       
+      // Nettoyer et formater les sous-tâches
+      const cleanSousTaches = (task.sousTaches || []).map((s: any) => {
+        const clean: any = {
+          titre: s.titre,
+          statut: s.statut,
+          echeance: s.echeance ? new Date(s.echeance).toISOString() : null,
+        };
+        if (s._id) clean._id = s._id;
+        return clean;
+      });
+
+      const cleanCommentaires = (task.commentaires || []).map((c: any) => {
+        const clean: any = {
+          auteur: c.auteur,
+          contenu: c.contenu,
+          date: c.date ? new Date(c.date).toISOString() : new Date().toISOString(),
+        };
+        if (c._id) clean._id = c._id;
+        return clean;
+      });
+
+      const updatePayload = {
+        titre: task.titre,
+        description: task.description,
+        priorite: task.priorite,
+        statut: task.statut,
+        categorie: task.categorie,
+        etiquettes: task.etiquettes,
+        echeance: task.echeance ? new Date(task.echeance).toISOString() : null,
+        auteur: task.auteur,
+        sousTaches: cleanSousTaches,
+        commentaires: cleanCommentaires,
+      };
+      
       // Faire un PUT de la tâche entière avec la sous-tâche modifiée
-      this.tasksService.putTask(task).subscribe({
+      this.tasksService.putTaskWithId(task._id, updatePayload).subscribe({
         next: (updatedTask: Task) => {
           this.updateTaskInSource(updatedTask);
           this.applyFilters(this.currentFilters);

@@ -24,15 +24,7 @@ $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   box-shadow: $shadow;
 }
 
-// ============ BARRE DE FILTRE PRINCIPALE ============
-.filter-bar {
-  display: flex;
-  gap: 0.75rem;
-  align-items: stretch;
-  flex-wrap: nowrap;
-}
-
-// Boîte de recherche - REDESIGNÉE
+// ============ BOÎTE DE RECHERCHE - REDESIGNÉE ============
 .search-box {
   flex: 1;
   min-width: 300px;
@@ -596,5 +588,74 @@ $gray-350: #b4b8c1;
       height: 18px;
     }
   }
+}
+
+// ============ INPUT POUR LES DATES ============
+.filter-input {
+  width: 100%;
+  padding: 0.625rem;
+  border: 2px solid $gray-200;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(0.3);
+    cursor: pointer;
+  }
+}
+
+// ============ CONTRÔLES DE TRI COMPACTS (BARRE PRINCIPALE) ============
+.separator {
+  width: 1px;
+  height: 36px;
+  background-color: $gray-200;
+}
+
+.sort-controls-compact {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sort-select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid $gray-200;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: $gray-700;
+  background-color: $white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  option {
+    padding: 0.5rem;
+    color: $gray-700;
+    background-color: $white;
+  }
+}
+
+// ============ SECTION TRI (PANNEAU - SUPPRIMÉE, GARDER POUR RÉFÉRENCE) ============
+// Anciennement utilisée dans le panneau avancé, maintenant dans la barre principale
+.sort-section {
+  display: none; // Caché - utiliser sort-controls-compact à la place
 }
 
