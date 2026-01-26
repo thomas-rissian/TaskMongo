@@ -12,7 +12,7 @@ import { Footer } from '../../../../libs/ui/layout/footer/footer';
   styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('Front');
+  protected readonly title = signal('TaskMongo');
 
   constructor(private router: Router) {}
 
