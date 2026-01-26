@@ -98,10 +98,24 @@
               class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer">
               ✓ Enregistrer
             </button>
+            <button
+              type="button"
+              *ngIf="task?._id"
+              (click)="openHistory()"
+              class="w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer">
+              📜 Voir l'historique
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal historique -->
+  <app-task-history 
+    *ngIf="showHistory && task" 
+    [task]="task!" 
+    (close)="closeHistory()">
+  </app-task-history>
 
 </form>

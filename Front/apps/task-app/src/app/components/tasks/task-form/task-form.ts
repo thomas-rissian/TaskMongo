@@ -9,11 +9,12 @@ import { arrayValidator } from '@task-app/core/validator/array.validator';
 import { SelectSimpleField, TextField, TextAreaField } from '@libs/ui/component.lib.include';
 import { Substack } from "@task-app/components/substack/substack";
 import { Etiquettes } from "@task-app/components/etiquettes/etiquettes";
+import { TaskHistoryComponent } from "../task-history/task-history";
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes, TextField, TextAreaField],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, AuthorSelect, SelectSimpleField, Comment, Substack, Etiquettes, TextField, TextAreaField, TaskHistoryComponent],
   templateUrl: './task-form.html',
 })
 export class TaskForm implements OnInit, OnChanges {
@@ -36,6 +37,7 @@ export class TaskForm implements OnInit, OnChanges {
   taskForm!: FormGroup;
   @Input() task: Task | null | undefined;
   taskId: string | undefined;
+  showHistory = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -225,6 +227,14 @@ export class TaskForm implements OnInit, OnChanges {
       }
       this.router.navigate(['/tasks/', data._id]);
     });
+  }
+
+  openHistory(): void {
+    this.showHistory = true;
+  }
+
+  closeHistory(): void {
+    this.showHistory = false;
   }
 
   cancel(): void {
