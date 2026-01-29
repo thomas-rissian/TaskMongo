@@ -1,0 +1,40 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TaskMongo API",
+    "version": "1.0.0",
+    "description": "API de gestion des tâches avec MongoDB",
+    "contact": {
+      "name": "Support API",
+      "email": "support@taskmongo.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Serveur de développement"
+    },
+    {
+      "url": "https://api.taskmongo.com",
+      "description": "Serveur de production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Tasks",
+      "description": "Endpoints pour la gestion des tâches"
+    },
+    {
+      "name": "Subtasks",
+      "description": "Endpoints pour la gestion des sous-tâches"
+    },
+    {
+      "name": "Comments",
+      "description": "Endpoints pour la gestion des commentaires"
+    },
+    {
+      "name": "Authors",
+      "description": "Endpoints pour la gestion des auteurs"
+    }
+  ]
+}
