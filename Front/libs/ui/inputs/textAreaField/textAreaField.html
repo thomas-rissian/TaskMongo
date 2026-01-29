@@ -1,0 +1,24 @@
+<div class="w-full space-y-2">
+  <label class="block text-sm font-medium text-gray-800">
+    {{ title }}
+  </label>
+
+  <textarea
+    class="w-full px-4 py-2.5 rounded-lg border-2 bg-white text-sm leading-relaxed min-h-[120px] max-h-[300px] resize-vertical transition-all duration-200 placeholder-gray-400 focus:outline-none disabled:opacity-60 disabled:bg-gray-100"
+    [value]="value"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    [disabled]="isDisabled"
+    [placeholder]="placeholder"
+    [class.border-gray-300]="!errorMessage"
+    [class.border-red-400]="errorMessage"
+    [class.focus:border-blue-500]="!errorMessage"
+    [class.focus:border-red-400]="errorMessage"
+    [class.focus:ring-2]="!errorMessage"
+    [class.focus:ring-blue-100]="!errorMessage"
+  ></textarea>
+
+  @if (errorMessage) {
+    <p class="text-xs text-red-500 font-medium">{{ errorMessage }}</p>
+  }
+</div>

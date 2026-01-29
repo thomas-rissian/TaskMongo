@@ -1,0 +1,50 @@
+<div class="space-y-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
+    <app-text-area-field
+      class="w-full"
+      title="Nouveau commentaire"
+      placeholder="Commentaire..."
+      [(ngModel)]="newCommentText" [ngModelOptions]="{standalone: true}">
+    </app-text-area-field>
+  </div>
+  
+  <button 
+    type="button" 
+    (click)="addComment()" 
+    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer w-full"> 
+    + Ajouter Commentaire
+  </button>
+
+  @for (ctrl of getControls(); track $index) {
+    <app-task-editable-container
+      [title]="(ctrl.get('auteur.nom')?.value || '') + ' ' + (ctrl.get('auteur.prenom')?.value || '')"
+      (save)="updateComment($index)"
+      (cancel)="resetComment($index)"
+      (delete)="removeComment($index)"
+      [viewTemplate]="viewTemplate"
+      [editTemplate]="editTemplate">
+    </app-task-editable-container>
+
+    <ng-template #viewTemplate>
+      <div class="space-y-2">
+        <small class="text-gray-500">
+          {{ ctrl.get('date')?.value | date:'short' }}
+        </small>
+        <div class="text-gray-800">{{ ctrl.get('contenu')?.value }}</div>
+      </div>
+    </ng-template>
+
+    <ng-template #editTemplate>
+      <label class="block text-sm font-medium text-gray-800 mb-2">Commentaire</label>
+        <app-text-area-field
+        class="w-full"
+        title="Éditer le commentaire"
+        placeholder="Commentaire..."
+          [ngModel]="getNewCommentText($index)"
+          (ngModelChange)="updateNewCommentText($index, $event)"
+          [ngModelOptions]="{standalone: true}">
+      </app-text-area-field>
+    </ng-template>
+  }
+</div>

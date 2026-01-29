@@ -1,0 +1,89 @@
+<div class="substack space-y-4">
+  <div>
+    <h3 class="text-sm font-semibold text-gray-800 pb-2">Sous-tâches</h3>
+    <div class="h-0.5 bg-gray-300"></div>
+  </div>
+
+  <div class="add-subtask grid grid-cols-4 gap-3 items-end">
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-800">Nouvelle sous-tâche</label>
+      <app-text-field
+        type="text"
+        class="w-full"
+        placeholder="Titre..."
+        title="Titre"
+        [(ngModel)]="newTitle" [ngModelOptions]="{standalone: true}"></app-text-field>
+    </div>
+
+    <app-select-simple-field
+      title="Statut"
+      [listField]="statusList"
+      [(ngModel)]="newStatus" [ngModelOptions]="{standalone: true}">
+    </app-select-simple-field>
+
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-800">Échéance</label>
+      <app-text-field type="date" class="w-full" [(ngModel)]="newEcheance" [ngModelOptions]="{standalone: true}" placeholder="Échéance" title="Échéance"></app-text-field>
+    </div>
+
+    <button 
+      type="button" 
+      (click)="addSubtask()" 
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer whitespace-nowrap self-end">
+      + Ajouter
+    </button>
+  </div>
+
+  <div class="subtasks-list space-y-3" *ngIf="getControls().length > 0">
+    <ng-container *ngFor="let ctrl of getControls(); let i = index; trackBy: trackByIndex">
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <app-task-editable-container
+          [title]="ctrl.get('titre')?.value || 'Sous-tâche'"
+          (save)="saveEdit(i)"
+          (cancel)="cancelEdit(i)"
+          (delete)="removeSubtask(i)"
+          (edit)="prepareEdit(i)"
+          [viewTemplate]="viewTemplate"
+          [editTemplate]="editTemplate">
+        </app-task-editable-container>
+
+        <ng-template #viewTemplate>
+          <div class="space-y-2">
+            <div class="text-sm text-gray-600">
+              <span>{{ ctrl.get('statut')?.value }}</span>
+              @if (ctrl.get('echeance')?.value) {
+                <span class="mx-2">•</span>
+                <span>{{ ctrl.get('echeance')?.value | date:'shortDate' }}</span>
+              }
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #editTemplate>
+          <div class="space-y-3">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-800">Titre</label>
+              <app-text-field
+                type="text"
+                class="w-full"
+                placeholder="Titre..."
+                title="Titre"
+                [formControl]="getControlField(ctrl, 'titre')"></app-text-field>
+            </div>
+
+            <app-select-simple-field
+              title="Statut"
+              [listField]="statusList"
+              [formControl]="getControlField(ctrl, 'statut')">
+            </app-select-simple-field>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-800">Échéance</label>
+              <app-text-field type="date" class="w-full" [formControl]="getControlField(ctrl, 'echeance')" placeholder="Échéance" title="Échéance"></app-text-field>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>

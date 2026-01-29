@@ -1,0 +1,66 @@
+<div class="w-full space-y-2">
+  @if (title) {
+    <label class="block text-sm font-medium text-gray-800">{{ title }}</label>
+  }
+  
+  <div class="relative w-full">
+    <div
+      class="flex justify-between items-center px-4 py-2.5 border-2 border-gray-300 rounded-lg bg-white cursor-pointer transition-all duration-200"
+      [class.border-blue-500]="isOpen"
+      [class.ring-2]="isOpen"
+      [class.ring-blue-100]="isOpen"
+      [class.opacity-60]="isDisabled"
+      [class.bg-gray-100]="isDisabled"
+      [attr.aria-disabled]="isDisabled"
+      (click)="toggleOpen()">
+      <span class="text-gray-700 text-sm">
+        @if (value) {
+          @if (paramData.length && value && typeof value === 'object') {
+            @for (key of paramData; track key) {
+              {{ value[key] }}&nbsp;
+            }
+          } @else {
+            {{ value }}
+          }
+        } @else {
+          <span class="text-gray-400">Sélectionner...</span>
+        }
+      </span>
+      <span class="text-gray-600 transition-transform duration-200" [class.rotate-180]="isOpen">▼</span>
+    </div>
+
+    @if (isOpen) {
+      <ul class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-blue-200 rounded-lg max-h-60 overflow-y-auto z-50 shadow-xl">
+        <li
+          class="px-4 py-2.5 cursor-pointer hover:bg-blue-50 transition-colors first:rounded-t-lg text-sm"
+          [class.bg-blue-500]="equals(value, null)"
+          [class.text-white]="equals(value, null)"
+          [class.font-medium]="equals(value, null)"
+          (click)="selectNone()">
+          None
+        </li>
+
+        @for (item of (listField.length ? listField : data); track item) {
+          <li
+            class="px-4 py-2.5 cursor-pointer hover:bg-blue-50 transition-colors last:rounded-b-lg text-sm"
+            [class.bg-blue-500]="equals(value, item)"
+            [class.text-white]="equals(value, item)"
+            [class.font-medium]="equals(value, item)"
+            (click)="selectItem(item)">
+            @if (paramData.length && item && typeof item === 'object') {
+              @for (key of paramData; track key) {
+                {{ item }}&nbsp;
+              }
+            } @else {
+              {{ item }}
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <p class="text-xs text-red-500 font-medium">{{ errorMessage }}</p>
+  }
+</div>

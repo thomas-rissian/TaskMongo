@@ -1,0 +1,31 @@
+<div class="w-full border-2 border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:border-gray-300">
+  <div class="flex items-center justify-between px-4 py-3 bg-linear-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+    <span class="text-sm font-semibold text-gray-800">{{ title }}</span>
+    <div class="flex items-center gap-3">
+      @if (isEditing) {
+        <button type="button" (click)="onSave()" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-green-600 hover:bg-green-700 py-1.5 px-3 rounded-md transition-colors duration-200">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m4.5 12.75 6 6 9-13.5"/></svg>
+          Sauvegarder
+        </button>
+        <button type="button" (click)="cancelEditing()" class="text-xs font-medium text-gray-600 hover:text-gray-800 px-3 py-1.5 rounded-md hover:bg-gray-200 transition-colors duration-200">Annuler</button>
+      } @else {
+        <button type="button" (click)="enableEditing()" class="inline-flex items-center gap-2 text-xs font-semibold text-blue-600 hover:text-blue-700 py-1.5 px-3 rounded-md hover:bg-blue-50 transition-colors duration-200">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M..."/></svg>
+          Éditer
+        </button>
+      }
+      <button type="button" (click)="onDelete()" class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-red-50 transition-colors duration-200" title="Supprimer">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+          <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="p-4 bg-white">
+    @if (isEditing) {
+      <ng-container *ngTemplateOutlet="editTemplate"></ng-container>
+    } @else {
+      <ng-container *ngTemplateOutlet="viewTemplate"></ng-container>
+    }
+  </div>
+</div>

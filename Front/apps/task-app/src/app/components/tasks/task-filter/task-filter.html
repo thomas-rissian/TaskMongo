@@ -1,0 +1,245 @@
+<div class="filter-container">
+  <!-- Barre de recherche principale -->
+  <div class="filter-bar">
+    <!-- Boîte de recherche redesignée -->
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Rechercher une tâche, auteur, catégorie..." 
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="applyFilters()"
+        class="search-input"
+      />
+      <button 
+        *ngIf="searchQuery" 
+        class="btn-clear" 
+        (click)="searchQuery = ''; applyFilters()"
+        title="Effacer la recherche"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="filter-actions">
+      <!-- Bouton Filtrer avancé -->
+      <button 
+        class="btn-filter-toggle" 
+        [class.active]="showAdvanced"
+        (click)="toggleAdvanced()"
+        title="Afficher/Masquer les filtres avancés"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 6a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v5.172a1 1 0 01-1.414.414l-2-1.414A1 1 0 019 17.172v-5.172a1 1 0 00-.293-.707L2.293 8.707A1 1 0 012 8V6z"></path>
+        </svg>
+        <span class="label">Filtres</span>
+        <span class="badge" *ngIf="hasActiveFilters()">{{ getFilterCount() }}</span>
+      </button>
+
+      <!-- Bouton Réinitialiser -->
+      <button 
+        class="btn-reset-filters"
+        (click)="resetFilters()"
+        [disabled]="!hasActiveFilters()"
+        title="Réinitialiser tous les filtres"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.25 1.75h4.5a1.5 1.5 0 011.5 1.5v4.5m-12 12h-4.5a1.5 1.5 0 01-1.5-1.5v-4.5M6 3.75a8.25 8.25 0 1116.5 0"></path>
+        </svg>
+      </button>
+
+      <!-- Séparateur -->
+      <div class="separator"></div>
+
+      <!-- Options de tri -->
+      <div class="sort-controls-compact">
+        <select 
+          [(ngModel)]="selectedTri" 
+          (change)="applyFilters()"
+          class="sort-select"
+          title="Trier par"
+        >
+          <option *ngFor="let option of triOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+
+        <select 
+          [(ngModel)]="selectedOrdre" 
+          (change)="applyFilters()"
+          class="sort-select"
+          title="Ordre"
+        >
+          <option value="asc">↑ Croissant</option>
+          <option value="desc">↓ Décroissant</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panneau des filtres avancés -->
+  <div class="filter-panel" *ngIf="showAdvanced">
+    <div class="filter-grid">
+      <!-- Filtre Statut -->
+      <div class="filter-item">
+        <label for="statut-filter">
+          <span class="filter-icon">📋</span>
+          <span class="filter-label">Statut</span>
+        </label>
+        <select 
+          id="statut-filter"
+          [(ngModel)]="selectedStatut" 
+          (change)="applyFilters()"
+          class="filter-select"
+        >
+          <option value="">Tous les statuts</option>
+          <option *ngFor="let statut of statuts" [value]="statut">{{ statut }}</option>
+        </select>
+        <div class="filter-tag" *ngIf="selectedStatut">
+          {{ selectedStatut }}
+          <button (click)="selectedStatut = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+
+      <!-- Filtre Priorité -->
+      <div class="filter-item">
+        <label for="priorite-filter">
+          <span class="filter-icon">🔴</span>
+          <span class="filter-label">Priorité</span>
+        </label>
+        <select 
+          id="priorite-filter"
+          [(ngModel)]="selectedPriorite" 
+          (change)="applyFilters()"
+          class="filter-select"
+        >
+          <option value="">Toutes les priorités</option>
+          <option *ngFor="let priorite of priorites" [value]="priorite">{{ priorite }}</option>
+        </select>
+        <div class="filter-tag" *ngIf="selectedPriorite">
+          {{ selectedPriorite }}
+          <button (click)="selectedPriorite = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+
+      <!-- Filtre Catégorie -->
+      <div class="filter-item">
+        <label for="categorie-filter">
+          <span class="filter-icon">🏷️</span>
+          <span class="filter-label">Catégorie</span>
+        </label>
+        <select 
+          id="categorie-filter"
+          [(ngModel)]="selectedCategorie" 
+          (change)="applyFilters()"
+          class="filter-select"
+        >
+          <option value="">Toutes les catégories</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+        <div class="filter-tag" *ngIf="selectedCategorie">
+          {{ selectedCategorie }}
+          <button (click)="selectedCategorie = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+
+      <!-- Filtre Étiquette -->
+      <div class="filter-item">
+        <label for="etiquette-filter">
+          <span class="filter-icon">🏷️</span>
+          <span class="filter-label">Étiquette</span>
+        </label>
+        <input 
+          id="etiquette-filter"
+          type="text"
+          [(ngModel)]="selectedEtiquette"
+          (keyup.enter)="applyFilters()"
+          (blur)="applyFilters()"
+          placeholder="Entrez une étiquette"
+          class="filter-input"
+        />
+        <div class="filter-tag" *ngIf="selectedEtiquette">
+          {{ selectedEtiquette }}
+          <button (click)="selectedEtiquette = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+
+      <!-- Filtre Date Avant -->
+      <div class="filter-item">
+        <label for="date-avant-filter">
+          <span class="filter-icon">📅</span>
+          <span class="filter-label">Avant le</span>
+        </label>
+        <input 
+          id="date-avant-filter"
+          type="date" 
+          [(ngModel)]="dateAvant" 
+          (change)="applyFilters()"
+          class="filter-input"
+        />
+        <div class="filter-tag" *ngIf="dateAvant">
+          {{ dateAvant }}
+          <button (click)="dateAvant = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+
+      <!-- Filtre Date Après -->
+      <div class="filter-item">
+        <label for="date-apres-filter">
+          <span class="filter-icon">📅</span>
+          <span class="filter-label">Après le</span>
+        </label>
+        <input 
+          id="date-apres-filter"
+          type="date" 
+          [(ngModel)]="dateApres" 
+          (change)="applyFilters()"
+          class="filter-input"
+        />
+        <div class="filter-tag" *ngIf="dateApres">
+          {{ dateApres }}
+          <button (click)="dateApres = ''; applyFilters()" class="btn-remove">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résumé des filtres actifs -->
+    <div class="filters-summary" *ngIf="hasActiveFilters()">
+      <span class="summary-label">Filtres actifs :</span>
+      <div class="active-filters">
+        <span class="filter-chip" *ngIf="searchQuery">
+          🔍 "{{ searchQuery }}"
+          <button (click)="searchQuery = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="selectedStatut">
+          📋 {{ selectedStatut }}
+          <button (click)="selectedStatut = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="selectedPriorite">
+          🔴 {{ selectedPriorite }}
+          <button (click)="selectedPriorite = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="selectedCategorie">
+          🏷️ {{ selectedCategorie }}
+          <button (click)="selectedCategorie = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="selectedEtiquette">
+          🏷️ {{ selectedEtiquette }}
+          <button (click)="selectedEtiquette = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="dateAvant">
+          📅 Avant {{ dateAvant }}
+          <button (click)="dateAvant = ''; applyFilters()">×</button>
+        </span>
+        <span class="filter-chip" *ngIf="dateApres">
+          📅 Après {{ dateApres }}
+          <button (click)="dateApres = ''; applyFilters()">×</button>

@@ -1,0 +1,121 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="h-full flex flex-col">
+
+  <div class="px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex-1">
+        <app-text-field
+          type="text"
+          placeholder="Entrez le titre de la tâche..."
+          [formControl]="$any(taskForm.get('titre'))" 
+          title="Titre de la tâche" />
+        <div class="h-0.5 bg-gray-300 mt-2"></div>
+      </div>
+
+      <div class="flex flex-col items-end gap-2">
+        <div class="flex items-center gap-2">
+          <app-select-simple-field
+            class="w-36"
+            [listField]="STATUS"
+            [formControl]="$any(taskForm.get('statut'))">
+          </app-select-simple-field>
+
+          <app-select-simple-field
+            class="w-36"
+            [listField]="PRIORITY"
+            [formControl]="$any(taskForm.get('priorite'))">
+          </app-select-simple-field>
+
+          <app-select-simple-field
+            class="w-36"
+            [listField]="CATEGORIES"
+            [formControl]="$any(taskForm.get('categorie'))">
+          </app-select-simple-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-6">
+    <div class="max-w-5xl mx-auto grid grid-cols-3 gap-6">
+      <div class="col-span-2 space-y-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <app-text-area-field
+            class="w-full"
+            placeholder="Entrez la description..."
+            title="Description"
+            [formControl]="$any(taskForm.get('description'))">
+          </app-text-area-field>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <app-etiquettes
+            [etiquettes]="$any(taskForm.get('etiquettes'))">
+          </app-etiquettes>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <app-substack
+            [subtaskForm]="$any(taskForm.get('sousTaches'))"
+            [statusList]="STATUS">
+          </app-substack>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <app-comment
+            [commentForm]="$any(taskForm.get('commentaires'))">
+          </app-comment>
+        </div>
+      </div>
+
+      <div class="col-span-1 space-y-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+          <app-author-select [authorGroup]="$any(taskForm.get('auteur'))"></app-author-select>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-4 space-y-2">
+          <label class="text-sm font-semibold text-gray-800">Dates</label>
+          <div class="h-0.5 bg-gray-300 mb-2"></div>
+          <div class="text-sm text-gray-700">
+            <div class="mb-2">
+              <div class="text-xs text-gray-500">Créé</div>
+              <div>{{ task?.dateCreation | date:'medium' }}</div>
+            </div>
+            <div>
+                <app-text-field type="date" class="w-full px-3 py-1 rounded border border-gray-200" [formControl]="$any(taskForm.get('echeance'))" placeholder="Échéance" title="Échéance"></app-text-field>
+                <div *ngIf="$any(taskForm.get('echeance'))?.value || task?.echeance" class="text-xs text-gray-600 mt-1">
+                  {{ ($any(taskForm.get('echeance'))?.value || task?.echeance) | date:'medium' }}
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+          <label class="text-sm font-semibold text-gray-800">Actions</label>
+          <div class="h-0.5 bg-gray-300 mb-2"></div>
+          <div class="flex flex-col gap-2">
+            <button
+              type="submit"
+              class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer">
+              ✓ Enregistrer
+            </button>
+            <button
+              type="button"
+              *ngIf="task?._id"
+              (click)="openHistory()"
+              class="w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer">
+              📜 Voir l'historique
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal historique -->
+  <app-task-history 
+    *ngIf="showHistory && task" 
+    [task]="task!" 
+    (close)="closeHistory()">
+  </app-task-history>
+
+</form>

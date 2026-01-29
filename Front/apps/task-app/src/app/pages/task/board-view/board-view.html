@@ -1,0 +1,115 @@
+<div class="board-container">
+  <!-- Header fixe -->
+  <header class="board-header">
+    <div class="header-content">
+      <h1>TaskMongo</h1>
+      <p class="task-count">{{ tasks.length }} tâche(s)</p>
+    </div>
+    <button class="btn-create" (click)="openEditModal()">+ Créer une tâche</button>
+  </header>
+
+  <!-- Barre de filtre -->
+  <app-task-filter (filterChange)="applyFilters($event)"></app-task-filter>
+
+  <!-- Contenu principal scrollable -->
+  <main class="board-content">
+    <!-- Loader -->
+    <div *ngIf="loading" class="loader-container">
+      <app-loader></app-loader>
+    </div>
+
+    <!-- Pas de résultats -->
+    <div *ngIf="!loading && tasks.length === 0" class="no-results">
+      <p>Aucune tâche trouvée</p>
+    </div>
+
+    <!-- Board avec colonnes -->
+    <div class="board-columns" *ngIf="!loading && tasks.length > 0">
+      <!-- Colonne pour chaque statut -->
+      <div *ngFor="let status of statuses" class="column-wrapper">
+        <h2 class="column-header">{{ status }}</h2>
+        
+        <!-- Zone de drop -->
+        <div 
+          cdkDropList
+          #droppable="cdkDropList"
+          [id]="'drop-' + status"
+          [cdkDropListData]="getTasksByStatus(status)"
+          [cdkDropListConnectedTo]="getConnectedDropListIds()"
+          cdkDropListSortingDisabled
+          class="drop-zone"
+          (cdkDropListDropped)="drop($event, status)">
+
+          <!-- Cartes de tâches -->
+          <div 
+            *ngFor="let task of getTasksByStatus(status)"
+            cdkDrag
+            class="task-card"
+            (click)="openEditModal(task)">
+            
+            <div class="task-header">
+              <h3>{{ task.titre }}</h3>
+              <button class="btn-delete" (click)="removeTask(task); $event.stopPropagation()">×</button>
+            </div>
+
+            <p class="task-description">{{ task.description }}</p>
+
+            <!-- Priorité et Catégorie -->
+            <div class="task-meta">
+              <span class="priority" [ngClass]="'priority-' + task.priorite">{{ task.priorite }}</span>
+              <span *ngIf="task.categorie" class="category">{{ task.categorie }}</span>
+            </div>
+
+            <!-- Sous-tâches avec checkboxes -->
+            <div class="subtasks" *ngIf="task.sousTaches && task.sousTaches.length">
+              <div class="subtasks-header">
+                Sous-tâches ({{ getCompletedSubtaskCount(task) }}/{{ task.sousTaches.length }})
+              </div>
+              <div class="subtask-item" *ngFor="let subtask of task.sousTaches" (click)="$event.stopPropagation()">
+                <input 
+                  type="checkbox" 
+                  [checked]="isSubtaskDone(subtask)"
+                  (change)="toggleSubtask(task, subtask._id!, subtask.statut!)"
+                  class="subtask-checkbox">
+                <span class="subtask-title" [ngClass]="{ 'done': isSubtaskDone(subtask) }">
+                  {{ subtask.titre }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Commentaires count -->
+            <div class="task-footer" *ngIf="task.commentaires && task.commentaires.length">
+              <span class="comment-count">💬 {{ task.commentaires.length }}</span>
+            </div>
+          </div>
+
+          <!-- Placeholder pour drop vide -->
+          <div class="drop-placeholder" *ngIf="getTasksByStatus(status).length === 0">
+            Aucune tâche
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer fixe -->
+  <footer class="board-footer">
+    <p>&copy; 2026 TaskMongo - Task Management</p>
+  </footer>
+
+  <!-- Modal pour éditer une tâche -->
+  <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Éditer la tâche</h2>
+        <button class="modal-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <app-task-form 
+          [task]="selectedTask || undefined"
+          (close)="closeModal()">
+        </app-task-form>
+      </div>
+    </div>
+  </div>
+</div>

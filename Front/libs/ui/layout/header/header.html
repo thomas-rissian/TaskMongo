@@ -1,0 +1,10 @@
+<header class="w-full bg-blue-500">
+  <div class="max-w-4xl mx-auto flex justify-center items-center px-4 py-3">
+    <nav class="flex items-center justify-center space-x-4">
+      @for (item of headerList; track $index) {
+        <a class="text-white px-3 py-1 rounded hover:bg-blue-600 hover:cursor-pointer inline-flex items-center"
+            [routerLink]="item">{{ item }}</a>
+      }
+    </nav>
+  </div>
+</header>

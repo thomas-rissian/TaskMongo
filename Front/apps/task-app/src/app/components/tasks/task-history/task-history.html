@@ -1,0 +1,50 @@
+<div class="history-modal-overlay" (click)="onClose()">
+  <div class="history-modal" (click)="$event.stopPropagation()">
+    <!-- En-tête -->
+    <div class="history-header">
+      <h2>📜 Historique des modifications</h2>
+      <button class="btn-close" (click)="onClose()" type="button">✕</button>
+    </div>
+
+    <!-- Contenu -->
+    <div class="history-content">
+      <div class="task-info">
+        <h3>{{ task?.titre }}</h3>
+        <p class="task-id">ID: {{ task?._id }}</p>
+      </div>
+
+      <div class="history-list" *ngIf="(task?.historiqueModifications?.length ?? 0) > 0; else noHistory">
+        <div class="history-item" *ngFor="let modification of task?.historiqueModifications">
+          <div class="history-item-header">
+            <span class="change-icon">{{ getChangeIcon(modification.champModifie) }}</span>
+            <span class="field-name">{{ getFieldLabel(modification.champModifie) }}</span>
+            <span class="change-date">{{ formatDate(modification.date) }}</span>
+          </div>
+
+          <div class="history-item-content">
+            <div class="change-row">
+              <span class="label">Avant :</span>
+              <span class="value old-value">{{ formatValue(modification.ancienneValeur) }}</span>
+            </div>
+            <div class="change-arrow">→</div>
+            <div class="change-row">
+              <span class="label">Après :</span>
+              <span class="value new-value">{{ formatValue(modification.nouvelleValeur) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noHistory>
+        <div class="no-history">
+          <p>Aucune modification enregistrée pour cette tâche.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Pied de page -->
+    <div class="history-footer">
+      <button class="btn-close-history" (click)="onClose()" type="button">Fermer</button>
+    </div>
+  </div>
+</div>
