@@ -1,195 +1,1009 @@
-[
-  {
-    "_id": { "$oid": "691f6725f64127aac071085a" },
-    "titre": "Ma première tâche",
-    "description": "Ceci est un test",
-    "statut": "Backlog",
-    "priorite": "Medium",
-    "auteur": {
-      "nom": "Dupont",
-      "prenom": "Jean",
-      "email": "jean.dupont@example.com"
-    },
-    "categorie": "Développement",
-    "etiquettes": ["frontend", "urgent"],
-    "dateCreation": { "$date": "2025-11-20T19:08:21.465Z" },
-    "echeance": { "$date": "2025-12-15T23:59:59.000Z" },
-    "sousTaches": [
-      {
-        "_id": { "$oid": "691f6725f64127aac071085b" },
-        "titre": "Analyser les requêtes",
-        "statut": "In progress",
-        "echeance": { "$date": "2025-12-10T23:59:59.000Z" }
-      },
-      {
-        "_id": { "$oid": "691f6725f64127aac071085c" },
-        "titre": "Créer les composants",
-        "statut": "Backlog",
-        "echeance": { "$date": "2025-12-12T23:59:59.000Z" }
-      }
-    ],
-    "commentaires": [
-      {
-        "_id": { "$oid": "691f6725f64127aac071085e" },
-        "auteur": {
-          "nom": "Martin",
-          "prenom": "Sophie",
-          "email": "sophie.martin@example.com"
-        },
-        "date": { "$date": "2025-11-21T10:30:00.000Z" },
-        "contenu": "J'ai commencé l'analyse, tout semble bon pour l'instant."
-      },
-      {
-        "_id": { "$oid": "691f6725f64127aac071085f" },
-        "auteur": {
-          "nom": "Dupont",
-          "prenom": "Jean",
-          "email": "jean.dupont@example.com"
-        },
-        "date": { "$date": "2025-11-21T14:15:00.000Z" },
-        "contenu": "Parfait ! Avance comme prévu."
-      }
-    ],
-    "historiqueModifications": [
-      {
-        "_id": { "$oid": "691f6725f64127aac0710866" },
-        "champModifie": "statut",
-        "ancienneValeur": "In progress",
-        "nouvelleValeur": "Backlog",
-        "date": { "$date": "2025-11-21T09:00:00.000Z" }
-      }
-    ],
-    "createdAt": { "$date": "2025-11-20T19:08:21.475Z" },
-    "updatedAt": { "$date": "2025-11-21T14:15:00.000Z" },
-    "__v": 0
+[{
+  "_id": {
+    "$oid": "691f6725f64127aac071085a"
   },
-
-  {
-    "_id": { "$oid": "691f67a4f64127aac071085d" },
-    "titre": "Ma deuxième tâche",
-    "description": "Ceci est le test 2",
-    "statut": "In progress",
-    "priorite": "High",
-    "auteur": {
-      "nom": "Dupont",
-      "prenom": "Jean",
-      "email": "jean.dupont@example.com"
-    },
-    "categorie": "Backend",
-    "etiquettes": ["API", "mongodb"],
-    "dateCreation": { "$date": "2025-11-20T19:10:28.637Z" },
-    "echeance": { "$date": "2025-12-08T23:59:59.000Z" },
-    "sousTaches": [
-      {
-        "_id": { "$oid": "691f67a4f64127aac071085e" },
-        "titre": "Configurer la base de données",
-        "statut": "Done",
-        "echeance": { "$date": "2025-11-22T23:59:59.000Z" }
-      },
-      {
-        "_id": { "$oid": "691f67a4f64127aac071085f" },
-        "titre": "Écrire les endpoints",
-        "statut": "In progress",
-        "echeance": { "$date": "2025-12-05T23:59:59.000Z" }
-      },
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710860" },
-        "titre": "Tests unitaires",
-        "statut": "Backlog",
-        "echeance": { "$date": "2025-12-08T23:59:59.000Z" }
-      }
-    ],
-    "commentaires": [
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710861" },
-        "auteur": {
-          "nom": "Bernard",
-          "prenom": "Pierre",
-          "email": "pierre.bernard@example.com"
-        },
-        "date": { "$date": "2025-11-22T08:45:00.000Z" },
-        "contenu": "La base de données est prête pour les tests."
-      },
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710862" },
-        "auteur": {
-          "nom": "Dupont",
-          "prenom": "Jean",
-          "email": "jean.dupont@example.com"
-        },
-        "date": { "$date": "2025-11-22T11:20:00.000Z" },
-        "contenu": "Merci Pierre ! Je commence les endpoints dès maintenant."
-      },
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710863" },
-        "auteur": {
-          "nom": "Bernard",
-          "prenom": "Pierre",
-          "email": "pierre.bernard@example.com"
-        },
-        "date": { "$date": "2025-11-22T16:30:00.000Z" },
-        "contenu": "N'oublie pas les validations côté serveur !"
-      }
-    ],
-    "historiqueModifications": [
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710864" },
-        "champModifie": "statut",
-        "ancienneValeur": "Backlog",
-        "nouvelleValeur": "In progress",
-        "date": { "$date": "2025-11-21T08:00:00.000Z" }
-      },
-      {
-        "_id": { "$oid": "691f67a4f64127aac0710865" },
-        "champModifie": "priorite",
-        "ancienneValeur": "Medium",
-        "nouvelleValeur": "High",
-        "date": { "$date": "2025-11-21T15:45:00.000Z" }
-      }
-    ],
-    "createdAt": { "$date": "2025-11-20T19:10:28.639Z" },
-    "updatedAt": { "$date": "2025-11-22T16:30:00.000Z" },
-    "__v": 0
+  "titre": "Ma première tâche",
+  "description": "Ceci est un test",
+  "statut": "In progress",
+  "priorite": "Medium",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
   },
-
-  {
-    "_id": { "$oid": "691f6a70177115e39d41113a" },
-    "titre": "Ma troisième tâche",
-    "description": "Ceci est un test",
-    "statut": "Backlog",
-    "priorite": "Medium",
-    "auteur": {
-      "nom": "Dupont",
-      "prenom": "Jean",
-      "email": "jean.dupont@example.com"
+  "dateCreation": {
+    "$date": "2025-11-20T19:08:21.465Z"
+  },
+  "sousTaches": [],
+  "commentaires": [],
+  "historiqueModifications": [
+    {
+      "champModifie": "ordre",
+      "ancienneValeur": 0,
+      "nouvelleValeur": 1,
+      "date": {
+        "$date": "2026-01-23T11:08:26.631Z"
+      },
+      "_id": {
+        "$oid": "697356aa3f041d0592c82932"
+      }
     },
-    "categorie": "Test",
-    "etiquettes": ["QA", "regression"],
-    "dateCreation": { "$date": "2025-11-20T19:22:24.298Z" },
-    "echeance": { "$date": "2025-12-20T23:59:59.000Z" },
-    "sousTaches": [
-      {
-        "_id": { "$oid": "691f6a70177115e39d41113b" },
-        "titre": "Tests de régression",
-        "statut": "Backlog",
-        "echeance": { "$date": "2025-12-15T23:59:59.000Z" }
+    {
+      "champModifie": "ordre",
+      "ancienneValeur": 1,
+      "nouvelleValeur": 0,
+      "date": {
+        "$date": "2026-01-23T11:21:54.210Z"
+      },
+      "_id": {
+        "$oid": "697359d23f041d0592c829b4"
       }
-    ],
-    "commentaires": [
-      {
-        "_id": { "$oid": "691f6a70177115e39d41113c" },
-        "auteur": {
-          "nom": "Garcia",
-          "prenom": "Maria",
-          "email": "maria.garcia@example.com"
+    },
+    {
+      "champModifie": "ordre",
+      "ancienneValeur": 0,
+      "nouvelleValeur": 1,
+      "date": {
+        "$date": "2026-01-23T11:53:59.156Z"
+      },
+      "_id": {
+        "$oid": "69736157467c8eaf393c9a0c"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Ready",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-26T09:10:35.528Z"
+      },
+      "_id": {
+        "$oid": "69772f8bb86c5a470c8c0a9e"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-11-20T19:08:21.475Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-26T09:10:35.529Z"
+  },
+  "__v": 4,
+  "etiquettes": [],
+  "ordre": 1
+},
+{
+  "_id": {
+    "$oid": "691f6a70177115e39d41113a"
+  },
+  "titre": "Ma troisième tâche",
+  "description": "Ceci est un test",
+  "statut": "Done",
+  "priorite": "Medium",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "Test",
+  "dateCreation": {
+    "$date": "2025-11-20T19:22:24.298Z"
+  },
+  "sousTaches": [],
+  "commentaires": [],
+  "historiqueModifications": [
+    {
+      "champModifie": "ordre",
+      "ancienneValeur": 0,
+      "nouvelleValeur": 1,
+      "date": {
+        "$date": "2026-01-23T11:21:12.430Z"
+      },
+      "_id": {
+        "$oid": "697359a83f041d0592c82984"
+      }
+    },
+    {
+      "champModifie": "ordre",
+      "ancienneValeur": 1,
+      "nouvelleValeur": 0,
+      "date": {
+        "$date": "2026-01-23T11:22:25.868Z"
+      },
+      "_id": {
+        "$oid": "697359f13f041d0592c829c2"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Ready",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-23T14:02:40.262Z"
+      },
+      "_id": {
+        "$oid": "69737f8036ffd954f5bf9384"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "In progress",
+      "nouvelleValeur": "Ready",
+      "date": {
+        "$date": "2026-01-23T14:02:41.689Z"
+      },
+      "_id": {
+        "$oid": "69737f8136ffd954f5bf939d"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Ready",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-23T15:25:58.079Z"
+      },
+      "_id": {
+        "$oid": "6973930636ffd954f5bf93cf"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "In progress",
+      "nouvelleValeur": "Ready",
+      "date": {
+        "$date": "2026-01-23T15:25:59.820Z"
+      },
+      "_id": {
+        "$oid": "6973930736ffd954f5bf93f2"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Ready",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-26T09:10:16.366Z"
+      },
+      "_id": {
+        "$oid": "69772f78b86c5a470c8c09c4"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "In progress",
+      "nouvelleValeur": "Ready",
+      "date": {
+        "$date": "2026-01-26T09:10:17.788Z"
+      },
+      "_id": {
+        "$oid": "69772f79b86c5a470c8c09f4"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Ready",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-26T09:10:33.901Z"
+      },
+      "_id": {
+        "$oid": "69772f89b86c5a470c8c0a7a"
+      }
+    },
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "In progress",
+      "nouvelleValeur": "Done",
+      "date": {
+        "$date": "2026-01-26T09:10:37.107Z"
+      },
+      "_id": {
+        "$oid": "69772f8db86c5a470c8c0adb"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-11-20T19:22:24.309Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-26T09:10:37.108Z"
+  },
+  "__v": 10,
+  "etiquettes": [],
+  "ordre": 0
+},
+{
+  "_id": {
+    "$oid": "6973516ff1818f3592297153"
+  },
+  "titre": "Ma troisième tâche",
+  "description": "Ceci est un test",
+  "echeance": {
+    "$date": "2026-01-29T00:00:00.000Z"
+  },
+  "statut": "Backlog",
+  "priorite": "Medium",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "etiquettes": [],
+  "sousTaches": [
+    {
+      "titre": "tesdt",
+      "statut": "Done",
+      "echeance": {
+        "$date": "2026-01-30T00:00:00.000Z"
+      },
+      "_id": null
+    }
+  ],
+  "commentaires": [],
+  "dateCreation": {
+    "$date": "2026-01-23T10:46:07.237Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "date": {
+        "$date": "2026-01-23T15:26:02.794Z"
+      },
+      "_id": {
+        "$oid": "6973930a36ffd954f5bf9406"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "date": {
+        "$date": "2026-01-23T15:26:04.424Z"
+      },
+      "_id": {
+        "$oid": "6973930c36ffd954f5bf941f"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "date": {
+        "$date": "2026-01-23T15:26:05.233Z"
+      },
+      "_id": {
+        "$oid": "6973930d36ffd954f5bf943d"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T09:10:18.678Z"
+      },
+      "_id": {
+        "$oid": "69772f7ab86c5a470c8c0a19"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": null
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z",
+          "_id": null
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T09:10:19.326Z"
+      },
+      "_id": {
+        "$oid": "69772f7bb86c5a470c8c0a43"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-23T10:46:07.240Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-26T09:10:19.329Z"
+  },
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "6977661fdeaeed895bc8ee8b"
+  },
+  "titre": "Ma troisième tâche",
+  "description": "Ceci est un test",
+  "echeance": {
+    "$date": "2026-02-05T00:00:00.000Z"
+  },
+  "statut": "Done",
+  "priorite": "Low",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "etiquettes": [
+    "dev"
+  ],
+  "sousTaches": [
+    {
+      "titre": "sous tache",
+      "statut": "Backlog",
+      "echeance": {
+        "$date": "2026-01-28T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bb6"
+      }
+    }
+  ],
+  "commentaires": [
+    {
+      "auteur": {
+        "nom": "test",
+        "prenom": "test",
+        "email": "test@test.fr"
+      },
+      "date": {
+        "$date": "2026-01-26T15:28:39.175Z"
+      },
+      "contenu": "commentaire",
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bb7"
+      }
+    }
+  ],
+  "dateCreation": {
+    "$date": "2026-01-26T13:03:27.491Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "categorie",
+      "nouvelleValeur": "Backend",
+      "date": {
+        "$date": "2026-01-26T15:28:51.631Z"
+      },
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bbe"
+      }
+    },
+    {
+      "champModifie": "etiquettes",
+      "ancienneValeur": [],
+      "nouvelleValeur": [
+        "dev"
+      ],
+      "date": {
+        "$date": "2026-01-26T15:28:51.634Z"
+      },
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bbf"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [],
+      "nouvelleValeur": [
+        {
+          "titre": "sous tache",
+          "statut": "Backlog",
+          "echeance": "2026-01-28T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T15:28:51.634Z"
+      },
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bc0"
+      }
+    },
+    {
+      "champModifie": "commentaires",
+      "ancienneValeur": [],
+      "nouvelleValeur": [
+        {
+          "auteur": {
+            "nom": "test",
+            "prenom": "test",
+            "email": "test@test.fr"
+          },
+          "contenu": "commentaire",
+          "date": "2026-01-26T15:28:39.175Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T15:28:51.634Z"
+      },
+      "_id": {
+        "$oid": "69778833cbafb0b4de1a4bc1"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-26T13:03:27.497Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-26T15:28:51.645Z"
+  },
+  "__v": 1,
+  "categorie": "Backend"
+},
+{
+  "_id": {
+    "$oid": "69777135deaeed895bc8efe6"
+  },
+  "titre": "Ma troisième tâche",
+  "description": "Ceci est un test",
+  "echeance": {
+    "$date": "2026-01-29T00:00:00.000Z"
+  },
+  "statut": "Ready",
+  "priorite": "Medium",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "Backend",
+  "etiquettes": [
+    "test"
+  ],
+  "sousTaches": [
+    {
+      "titre": "tesdt",
+      "statut": "Backlog",
+      "echeance": {
+        "$date": "2026-01-30T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "69777135deaeed895bc8efe7"
+      }
+    }
+  ],
+  "commentaires": [],
+  "dateCreation": {
+    "$date": "2026-01-26T13:50:45.938Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Backlog",
+      "nouvelleValeur": "Ready",
+      "date": {
+        "$date": "2026-01-26T13:58:13.662Z"
+      },
+      "_id": {
+        "$oid": "697772f5fbfd889a5af22eaf"
+      }
+    },
+    {
+      "champModifie": "etiquettes",
+      "ancienneValeur": [],
+      "nouvelleValeur": [
+        "test"
+      ],
+      "date": {
+        "$date": "2026-01-26T14:08:23.445Z"
+      },
+      "_id": {
+        "$oid": "69777557775a4d8fac113c46"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "69777135deaeed895bc8efe7"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "69777135deaeed895bc8efe7",
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T14:08:23.445Z"
+      },
+      "_id": {
+        "$oid": "69777557775a4d8fac113c47"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "69777135deaeed895bc8efe7"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "69777135deaeed895bc8efe7",
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T14:27:19.884Z"
+      },
+      "_id": {
+        "$oid": "697779c75ab0c9277ec738ad"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "69777135deaeed895bc8efe7"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "69777135deaeed895bc8efe7",
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T14:27:20.521Z"
+      },
+      "_id": {
+        "$oid": "697779c85ab0c9277ec738c2"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Done",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "69777135deaeed895bc8efe7"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "69777135deaeed895bc8efe7",
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-26T16:28:26.347Z"
+      },
+      "_id": {
+        "$oid": "6977962a60a21efdbba7f497"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "69777135deaeed895bc8efe7"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "69777135deaeed895bc8efe7",
+          "titre": "tesdt",
+          "statut": "Backlog",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-29T07:25:48.004Z"
+      },
+      "_id": {
+        "$oid": "697b0b7c1c5388c4c0fff260"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-26T13:50:45.941Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-29T07:25:48.010Z"
+  },
+  "__v": 6
+},
+{
+  "_id": {
+    "$oid": "69777149deaeed895bc8f032"
+  },
+  "titre": "Ma première tâche",
+  "description": "Ceci est un test",
+  "echeance": {
+    "$date": "2026-01-21T00:00:00.000Z"
+  },
+  "statut": "In review",
+  "priorite": "Medium",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "Database",
+  "etiquettes": [],
+  "sousTaches": [],
+  "commentaires": [],
+  "dateCreation": {
+    "$date": "2026-01-26T13:51:05.866Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "In progress",
+      "nouvelleValeur": "In review",
+      "date": {
+        "$date": "2026-01-29T07:25:58.295Z"
+      },
+      "_id": {
+        "$oid": "697b0b861c5388c4c0fff2b7"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-26T13:51:05.867Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-29T07:25:58.296Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69777155deaeed895bc8f04c"
+  },
+  "titre": "Ma première tâche",
+  "description": "Ceci est un test",
+  "echeance": {
+    "$date": "2026-01-21T00:00:00.000Z"
+  },
+  "statut": "In progress",
+  "priorite": "Low",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "Database",
+  "etiquettes": [
+    "test"
+  ],
+  "sousTaches": [],
+  "commentaires": [],
+  "dateCreation": {
+    "$date": "2026-01-26T13:51:17.878Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "etiquettes",
+      "ancienneValeur": [],
+      "nouvelleValeur": [
+        "test"
+      ],
+      "date": {
+        "$date": "2026-01-26T16:35:28.093Z"
+      },
+      "_id": {
+        "$oid": "697797d060a21efdbba7f62f"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-26T13:51:17.879Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-26T16:35:28.096Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "697b137c1c5388c4c0fff3c9"
+  },
+  "titre": "diapo mongo",
+  "description": "réaliser diapo",
+  "echeance": {
+    "$date": "2026-01-30T00:00:00.000Z"
+  },
+  "statut": "In progress",
+  "priorite": "High",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "",
+  "etiquettes": [
+    "bdd",
+    "mongo"
+  ],
+  "sousTaches": [
+    {
+      "titre": "diapo",
+      "statut": "Ready",
+      "echeance": {
+        "$date": "2026-01-30T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "697b137c1c5388c4c0fff3ca"
+      }
+    },
+    {
+      "titre": "oral",
+      "statut": "In progress",
+      "echeance": {
+        "$date": "2026-01-30T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "697b137c1c5388c4c0fff3cb"
+      }
+    }
+  ],
+  "commentaires": [
+    {
+      "auteur": {
+        "nom": "dupond",
+        "prenom": "jean",
+        "email": "jean.dupond@gmail.com"
+      },
+      "date": {
+        "$date": "2026-01-29T07:59:14.844Z"
+      },
+      "contenu": "compliqué",
+      "_id": {
+        "$oid": "697b137c1c5388c4c0fff3cc"
+      }
+    }
+  ],
+  "dateCreation": {
+    "$date": "2026-01-29T07:59:56.522Z"
+  },
+  "historiqueModifications": [
+    {
+      "champModifie": "statut",
+      "ancienneValeur": "Backlog",
+      "nouvelleValeur": "In progress",
+      "date": {
+        "$date": "2026-01-29T08:02:29.246Z"
+      },
+      "_id": {
+        "$oid": "697b14151c5388c4c0fff764"
+      }
+    },
+    {
+      "champModifie": "sousTaches",
+      "ancienneValeur": [
+        {
+          "titre": "diapo",
+          "statut": "Ready",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "697b137c1c5388c4c0fff3ca"
+          }
         },
-        "date": { "$date": "2025-11-23T09:15:00.000Z" },
-        "contenu": "En attente de la version stable pour commencer les tests."
+        {
+          "titre": "oral",
+          "statut": "In progress",
+          "echeance": {
+            "$date": "2026-01-30T00:00:00.000Z"
+          },
+          "_id": {
+            "$oid": "697b137c1c5388c4c0fff3cb"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "697b137c1c5388c4c0fff3ca",
+          "titre": "diapo",
+          "statut": "Ready",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        },
+        {
+          "_id": "697b137c1c5388c4c0fff3cb",
+          "titre": "oral",
+          "statut": "In progress",
+          "echeance": "2026-01-30T00:00:00.000Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-29T08:02:29.247Z"
+      },
+      "_id": {
+        "$oid": "697b14151c5388c4c0fff765"
       }
-    ],
-    "historiqueModifications": [],
-    "createdAt": { "$date": "2025-11-20T19:22:24.309Z" },
-    "updatedAt": { "$date": "2025-11-23T09:15:00.000Z" },
-    "__v": 0
-  }
-]
+    },
+    {
+      "champModifie": "commentaires",
+      "ancienneValeur": [
+        {
+          "auteur": {
+            "nom": "dupond",
+            "prenom": "jean",
+            "email": "jean.dupond@gmail.com"
+          },
+          "date": {
+            "$date": "2026-01-29T07:59:14.844Z"
+          },
+          "contenu": "compliqué",
+          "_id": {
+            "$oid": "697b137c1c5388c4c0fff3cc"
+          }
+        }
+      ],
+      "nouvelleValeur": [
+        {
+          "_id": "697b137c1c5388c4c0fff3cc",
+          "auteur": {
+            "nom": "dupond",
+            "prenom": "jean",
+            "email": "jean.dupond@gmail.com"
+          },
+          "contenu": "compliqué",
+          "date": "2026-01-29T07:59:14.844Z"
+        }
+      ],
+      "date": {
+        "$date": "2026-01-29T08:02:29.248Z"
+      },
+      "_id": {
+        "$oid": "697b14151c5388c4c0fff766"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-29T07:59:56.526Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-29T08:02:29.253Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "697b13ae1c5388c4c0fff458"
+  },
+  "titre": "sdss",
+  "description": "",
+  "echeance": {
+    "$date": "2026-01-21T00:00:00.000Z"
+  },
+  "statut": "Ready",
+  "priorite": "Low",
+  "auteur": {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "email": "jean.dupont@example.com"
+  },
+  "categorie": "",
+  "etiquettes": [],
+  "sousTaches": [],
+  "commentaires": [],
+  "dateCreation": {
+    "$date": "2026-01-29T08:00:46.652Z"
+  },
+  "historiqueModifications": [],
+  "createdAt": {
+    "$date": "2026-01-29T08:00:46.654Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-29T08:00:46.654Z"
+  },
+  "__v": 0
+}]
