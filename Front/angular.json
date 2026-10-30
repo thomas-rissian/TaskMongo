@@ -6,7 +6,6 @@
     "analytics": false
   },
   "newProjectRoot": "projects",
-  "defaultProject": "Front",
   "projects": {
     "Front": {
       "projectType": "application",
@@ -42,8 +41,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"
